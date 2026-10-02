@@ -2,7 +2,12 @@ import { useEffect } from 'react'
 
 /**
  * Adds `.is-visible` to every `.reveal` element inside `scope` once it
- * scrolls into view. Mirrors the observer behaviour of the reference design.
+ * scrolls into view.
+ *
+ * A MutationObserver keeps watching for nodes added later, so content that
+ * mounts when the view switches (Services, Contact) is picked up too — a
+ * plain IntersectionObserver would only ever see the first view and leave the
+ * later sections stuck at opacity 0.
  *
  * @param {React.RefObject<HTMLElement>|HTMLElement} scope
  */
@@ -11,10 +16,10 @@ export function useReveal(scope) {
     const root = scope?.current ?? scope
     if (!root || typeof root.querySelectorAll !== 'function') return
 
-    const nodes = root.querySelectorAll('.reveal')
-
     if (!('IntersectionObserver' in window)) {
-      nodes.forEach((n) => n.classList.add('is-visible'))
+      root
+        .querySelectorAll('.reveal')
+        .forEach((n) => n.classList.add('is-visible'))
       return
     }
 
@@ -30,7 +35,22 @@ export function useReveal(scope) {
       { threshold: 0.12, rootMargin: '0px 0px -6% 0px' }
     )
 
-    nodes.forEach((n) => io.observe(n))
-    return () => io.disconnect()
+    const observeWithin = (node) => {
+      if (!node || node.nodeType !== 1) return
+      if (node.matches('.reveal:not(.is-visible)')) io.observe(node)
+      node.querySelectorAll?.('.reveal:not(.is-visible)').forEach((n) => io.observe(n))
+    }
+
+    root.querySelectorAll('.reveal:not(.is-visible)').forEach((n) => io.observe(n))
+
+    const mo = new MutationObserver((mutations) => {
+      mutations.forEach((m) => m.addedNodes.forEach(observeWithin))
+    })
+    mo.observe(root, { childList: true, subtree: true })
+
+    return () => {
+      io.disconnect()
+      mo.disconnect()
+    }
   }, [scope])
 }
