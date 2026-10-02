@@ -28,7 +28,7 @@ from PIL import Image, ImageChops, ImageFilter
 SRC = "logo.png"
 DST = "public/logo-dark.png"
 LIGHT_DST = "public/logo.png"
-OUT_SIZE = 320
+OUT_SIZE = 512
 
 # Pixels brighter than this (0-255 luminance) are treated as background
 # when estimating the gradient.
@@ -86,26 +86,88 @@ def build_alpha(img: Image.Image, bg: Image.Image) -> Image.Image:
     )
 
 
+def normalize_alpha(alpha: Image.Image, lo: int = 24, percentile: float = 0.995) -> Image.Image:
+    """
+    Stretch the matte so the solid core of the artwork reaches full opacity.
+
+    The deviation-based alpha is relative, so the darkest ink only ever lands
+    around 70-75% opacity. Left alone, a white mark knocked out through that
+    matte looks washed out and slightly transparent on the page. Stretching
+    against a high percentile keeps the anti-aliased edge falloff while
+    pinning the interior to 255.
+    """
+    hist = alpha.histogram()
+    total = sum(hist)
+    target = total * percentile
+    running = 0
+    peak = 255
+    for value, count in enumerate(hist):
+        running += count
+        if running >= target:
+            peak = max(value, 1)
+            break
+
+    # Ignore the faint halo when deciding the floor, so a low-alpha ring does
+    # not drag the visible edge down.
+    solid = alpha.point(lambda v: 255 if v >= max(lo, peak // 3) else 0)
+    solid_px = solid.histogram()[255]
+    if solid_px < 64:
+        return alpha
+
+    gain = 255.0 / max(peak - lo, 1)
+    return alpha.point(lambda v: 0 if v < lo else min(255, int((v - lo) * gain)))
+
+
+def tight_bbox(alpha: Image.Image, threshold: int = 128, pad_ratio: float = 0.04):
+    """
+    Bounding box of the actual artwork.
+
+    `alpha.getbbox()` is useless here: the background removal always leaves a
+    faint halo, so the box covers the whole canvas and the mark ends up tiny
+    inside a mostly-empty image. Thresholding first finds the real ink.
+    """
+    solid = alpha.point(lambda v: 255 if v >= threshold else 0)
+    box = solid.getbbox()
+    if box is None:
+        return (0, 0, alpha.width, alpha.height)
+
+    x0, y0, x1, y1 = box
+    pad = int(max(x1 - x0, y1 - y0) * pad_ratio)
+    return (
+        max(0, x0 - pad),
+        max(0, y0 - pad),
+        min(alpha.width, x1 + pad),
+        min(alpha.height, y1 + pad),
+    )
+
+
 def main() -> None:
     img = Image.open(SRC).convert("RGB")
     bg = estimate_background(img, BG_CUTOFF)
-    alpha = build_alpha(img, bg)
+    alpha = normalize_alpha(build_alpha(img, bg))
 
-    matted = img.copy()
-    matted.putalpha(alpha)
+    # Crop both variants to the SAME box so the mark is framed identically in
+    # either theme and the header does not resize when the toggle flips.
+    box = tight_bbox(alpha)
+    alpha_c = alpha.crop(box)
+    light = img.crop(box)
 
-    # Crop both variants to the SAME box, derived from the artwork itself,
-    # so the mark is framed identically in either theme and the header does
-    # not resize when the toggle flips.
-    bbox = matted.getbbox() or (0, 0, img.width, img.height)
-    dark = matted.crop(bbox)
-    light = img.crop(bbox)
+    # The source mark is near-black (mean luminance ~54/255), so simply
+    # removing the background leaves artwork that disappears into the #05080F
+    # dark surface. For dark mode the mark is knocked out to solid white,
+    # which is the standard reversed-out variant and keeps every internal
+    # detail of the drawing intact.
+    white = Image.new("RGB", alpha_c.size, (255, 255, 255))
+    dark = white.convert("RGBA")
+    dark.putalpha(alpha_c)
 
-    # The mark is displayed at most ~96px wide; 512 keeps it crisp on
-    # high-DPI screens at a fraction of the weight.
+    # The mark is displayed up to ~160px wide; 512 stays crisp on high-DPI
+    # screens at a fraction of the weight.
     if max(dark.size) > OUT_SIZE:
-        dark = dark.resize((OUT_SIZE, OUT_SIZE), Image.LANCZOS)
-        light = light.resize((OUT_SIZE, OUT_SIZE), Image.LANCZOS)
+        scale = OUT_SIZE / max(dark.size)
+        size = (max(1, round(dark.width * scale)), max(1, round(dark.height * scale)))
+        dark = dark.resize(size, Image.LANCZOS)
+        light = light.resize(size, Image.LANCZOS)
 
     dark.save(DST, optimize=True)
     light.save(LIGHT_DST, optimize=True)
@@ -113,10 +175,10 @@ def main() -> None:
     a = dark.split()[3]
     hist = a.histogram()
     total = dark.width * dark.height
-    transparent = hist[0]
-    opaque = hist[255]
-    print(f"wrote {DST}  {dark.size[0]}x{dark.size[1]} RGBA  (transparent background)")
+    transparent, opaque = hist[0], hist[255]
+    print(f"wrote {DST}  {dark.size[0]}x{dark.size[1]} RGBA  (white mark, transparent bg)")
     print(f"wrote {LIGHT_DST}  {light.size[0]}x{light.size[1]} RGB  (background kept)")
+    print(f"  crop box          : {box}  (source {img.width}x{img.height})")
     print(f"  fully transparent : {transparent / total * 100:5.1f}%")
     print(f"  fully opaque       : {opaque / total * 100:5.1f}%")
     print(f"  partial (antialias): {(total - transparent - opaque) / total * 100:5.1f}%")

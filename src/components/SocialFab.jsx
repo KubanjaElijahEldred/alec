@@ -162,10 +162,11 @@ export function SocialFab() {
         <a
           key={b.id}
           href={b.href}
-          target="_blank"
-          rel="noopener noreferrer"
+          // tel: and mailto: have nothing to open in a new tab; matching the
+          // gated behaviour used for the same links in Services.jsx.
+          target={/^(tel:|mailto:)/.test(b.href) ? undefined : '_blank'}
+          rel={/^(tel:|mailto:)/.test(b.href) ? undefined : 'noopener noreferrer'}
           className={`socialfab__badge ${open ? 'is-open' : ''}`}
-          data-social={b.label.toLowerCase()}
           style={{
             left: b.x,
             top: b.y,
@@ -191,8 +192,19 @@ export function SocialFab() {
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        // The fan was pointer-only, so Enter/Space did nothing even though the
+        // button advertises aria-expanded. A real click toggles it; a pointer
+        // interaction that moved the button is a drag, not a tap, and is
+        // handled in onPointerUp.
+        onClick={(e) => {
+          if (e.detail === 0) setOpen((o) => !o) // keyboard activation
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') setOpen(false)
+        }}
         aria-label="Social links — drag to move, tap to open"
         aria-expanded={open}
+        aria-haspopup="true"
         title="Connect — drag me"
       >
         {open ? <X className="h-6 w-6" /> : <Share2 className="h-6 w-6" />}
