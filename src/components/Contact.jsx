@@ -156,7 +156,14 @@ export function Contact() {
           <LiveMap />
 
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
-            <div className="border border-line bg-card p-5">
+            {/* Every channel on this page is a link, including these three, so
+                the card styling never implies a dead control. */}
+            <a
+              href={profile.mapsQuery}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="grad-border block bg-card p-5 transition-colors hover:bg-card-hover"
+            >
               <MapPin className="h-5 w-5 text-brand" />
               <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-muted-2">
                 Base
@@ -164,8 +171,11 @@ export function Contact() {
               <p className="mt-1 font-display text-base font-bold text-ink">
                 {profile.location}
               </p>
-            </div>
-            <div className="border border-line bg-card p-5">
+            </a>
+            <a
+              href={`tel:${profile.phone}`}
+              className="grad-border block bg-card p-5 transition-colors hover:bg-card-hover"
+            >
               <Phone className="h-5 w-5 text-brand" />
               <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-muted-2">
                 Call or WhatsApp
@@ -173,8 +183,11 @@ export function Contact() {
               <p className="mt-1 font-display text-base font-bold text-ink">
                 {profile.phoneDisplay}
               </p>
-            </div>
-            <div className="border border-line bg-card p-5">
+            </a>
+            <a
+              href={`mailto:${profile.email}?subject=Project%20inquiry`}
+              className="grad-border block bg-card p-5 transition-colors hover:bg-card-hover"
+            >
               <Mail className="h-5 w-5 text-brand" />
               <p className="mt-4 font-mono text-[10px] uppercase tracking-widest text-muted-2">
                 Email
@@ -182,7 +195,7 @@ export function Contact() {
               <p className="mt-1 break-all font-display text-base font-bold text-ink">
                 {profile.email}
               </p>
-            </div>
+            </a>
           </div>
         </div>
       </section>

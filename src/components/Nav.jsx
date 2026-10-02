@@ -38,40 +38,49 @@ export function Nav({ view, onView }) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-line bg-base/92 backdrop-blur-md">
-        <div className="flex h-20 w-full items-center justify-between px-5 lg:px-10">
+      {/* The bar keeps its blue gradient in both themes, so the mark is always
+          the white knockout and the controls are always white-on-blue. */}
+      <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-white/15 bg-gradient-to-r from-[#0A2470] via-[#1447B8] to-[#0B1E52] shadow-[0_12px_44px_-16px_rgba(20,71,184,0.85)]">
+        {/* Glossy top edge, to read as a lit surface rather than a flat bar. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent" />
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/12 to-transparent" />
+
+        <div className="relative flex h-20 w-full items-center justify-between px-5 lg:px-10">
           <button
+            type="button"
             onClick={() => go('profile')}
             className="flex cursor-pointer items-center gap-3"
             aria-label="Go to profile section"
           >
-            <Logo className="h-12 w-auto" />
+            <Logo tone="dark" className="h-14 w-auto drop-shadow-[0_2px_10px_rgba(0,0,0,0.45)] sm:h-16" />
           </button>
 
           <div className="hidden items-center gap-3 md:flex">
             {VIEWS.map((v) => (
               <button
                 key={v.id}
+                type="button"
                 onClick={() => go(v.id)}
                 className={`cursor-pointer px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] transition-colors ${
                   view === v.id
-                    ? 'bg-brand text-on-brand'
-                    : 'border border-line text-muted hover:border-brand/60 hover:text-ink'
+                    ? 'bg-white text-[#0A2470] shadow-[0_0_20px_rgba(255,255,255,0.45)]'
+                    : 'border border-white/35 text-white/85 hover:border-white hover:bg-white/10 hover:text-white'
                 }`}
               >
                 {v.label}
               </button>
             ))}
-            <ThemeToggle />
+            <ThemeToggle tone="dark" />
             <WhatsAppBadge className="px-4 py-2 text-xs" />
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
-            <ThemeToggle />
+            <ThemeToggle tone="dark" />
             <WhatsAppBadge compact className="h-9 w-9 justify-center" />
             <button
+              type="button"
               onClick={() => setOpen((o) => !o)}
-              className="nav__burger grid h-9 w-9 cursor-pointer place-items-center border border-line text-ink-2"
+              className="nav__burger grid h-9 w-9 cursor-pointer place-items-center border border-white/35 text-white transition-colors hover:border-white hover:bg-white/10"
               aria-label="Toggle menu"
               aria-expanded={open}
             >
@@ -88,17 +97,18 @@ export function Nav({ view, onView }) {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            className="fixed inset-x-0 top-20 z-40 border-b border-line bg-base p-5 md:hidden"
+            className="fixed inset-x-0 top-20 z-40 border-b border-white/15 bg-gradient-to-b from-[#1447B8] to-[#0B1E52] p-5 shadow-[0_24px_50px_-20px_rgba(0,0,0,0.6)] md:hidden"
           >
             <div className="grid gap-3">
               {VIEWS.map((v) => (
                 <button
                   key={v.id}
+                  type="button"
                   onClick={() => go(v.id)}
-                  className={`cursor-pointer border px-4 py-3 text-left font-display font-bold ${
+                  className={`cursor-pointer border px-4 py-3 text-left font-display font-bold text-white transition-colors ${
                     view === v.id
-                      ? 'border-brand bg-brand/10 text-ink'
-                      : 'border-line text-ink'
+                      ? 'border-white bg-white text-[#0A2470]'
+                      : 'border-white/30 hover:border-white hover:bg-white/10'
                   }`}
                 >
                   {v.label}

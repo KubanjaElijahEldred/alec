@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Aperture, Film, Mic, Disc3 } from 'lucide-react'
+import { Logo } from './Logo'
 
 const DURATION = 7000 // 7 seconds, as requested
 const FPS = 24
@@ -94,25 +95,37 @@ export function SplashScreen({ onDone }) {
   }, [onDone])
 
   // Let anyone impatient get straight to the portfolio.
-  useEffect(() => {
-    const skip = () => {
-      if (finished.current) return
-      finished.current = true
-      cancelAnimationFrame(raf.current)
-      setExiting(true)
-      setTimeout(onDone, 750)
-    }
-    window.addEventListener('keydown', skip)
-    window.addEventListener('pointerdown', skip)
-    return () => {
-      window.removeEventListener('keydown', skip)
-      window.removeEventListener('pointerdown', skip)
-    }
+  const canSkip = elapsed > 1500
+  const canSkipRef = useRef(false)
+  canSkipRef.current = canSkip
+
+  // Single exit path, shared by the button and the global listeners. The
+  // listeners used to fire during the first 1.5s, while the "Skip intro"
+  // button was still deliberately hidden, so any stray tap dismissed the intro
+  // before it had a chance to read.
+  const skip = useCallback(() => {
+    if (finished.current) return
+    finished.current = true
+    cancelAnimationFrame(raf.current)
+    setExiting(true)
+    setTimeout(onDone, 750)
   }, [onDone])
+
+  useEffect(() => {
+    const onKeyOrTap = () => {
+      if (!canSkipRef.current) return
+      skip()
+    }
+    window.addEventListener('keydown', onKeyOrTap)
+    window.addEventListener('pointerdown', onKeyOrTap)
+    return () => {
+      window.removeEventListener('keydown', onKeyOrTap)
+      window.removeEventListener('pointerdown', onKeyOrTap)
+    }
+  }, [skip])
 
   const pct = Math.round(progress * 100)
   const secondsLeft = Math.max(0, Math.ceil((DURATION - elapsed) / 1000))
-  const canSkip = elapsed > 1500
 
   return (
     <motion.div
@@ -140,8 +153,20 @@ export function SplashScreen({ onDone }) {
         <span className="tabular-nums text-azure-soft">{timecode(elapsed)}</span>
       </div>
 
-      {/* ---------- Centre: iris + monogram ---------- */}
+      {/* ---------- Centre: logo + iris + monogram ---------- */}
       <div className="relative flex flex-col items-center">
+        {/* Alec's own mark, shown above the iris and sized to stay legible on
+            a phone. Theme-aware, so it reads on either splash background. */}
+        <motion.div
+          className="relative mb-10 flex justify-center sm:mb-12"
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span className="splash-glow pointer-events-none absolute inset-0 rounded-full bg-brand/25 blur-3xl" />
+          <Logo className="relative h-28 w-auto drop-shadow-[0_4px_24px_rgba(0,0,0,0.4)] sm:h-40" />
+        </motion.div>
+
         <div className="relative grid h-44 w-44 place-items-center sm:h-56 sm:w-56">
           {/* Iris ring */}
           <div className="absolute inset-0 opacity-70">
@@ -261,13 +286,8 @@ export function SplashScreen({ onDone }) {
 
       {/* Skip hint */}
       <button
-        onClick={() => {
-          if (finished.current) return
-          finished.current = true
-          cancelAnimationFrame(raf.current)
-          setExiting(true)
-          setTimeout(onDone, 750)
-        }}
+        type="button"
+        onClick={skip}
         className={`absolute right-5 top-14 border border-line bg-card/80 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.24em] text-muted-2 backdrop-blur transition-all duration-500 hover:border-brand hover:text-ink sm:right-10 ${
           canSkip ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}

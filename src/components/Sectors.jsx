@@ -41,6 +41,7 @@ export function Sectors({ goToPage }) {
             </h2>
           </div>
           <button
+            type="button"
             onClick={() => goToPage('contact')}
             className="inline-flex cursor-pointer items-center gap-2 text-left font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-brand"
           >

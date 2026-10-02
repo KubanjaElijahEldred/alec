@@ -6,13 +6,22 @@ import {
   PartyPopper,
   Scissors,
   PenTool,
+  Sparkles,
 } from 'lucide-react'
 import { Logo } from './Logo'
 import { BrandCard } from './BrandCard'
 import { Sectors } from './Sectors'
 import { brands, profile, stats } from '../data'
 
-const serviceGlyphs = [Clapperboard, Repeat, PartyPopper, Scissors, PenTool]
+// One entry per service, matching the six services in data.js.
+const serviceStrip = [
+  { label: 'Shoot', Glyph: Clapperboard },
+  { label: 'Content', Glyph: Sparkles },
+  { label: 'Social', Glyph: Repeat },
+  { label: 'Events', Glyph: PartyPopper },
+  { label: 'Edit', Glyph: Scissors },
+  { label: 'Scripts', Glyph: PenTool },
+]
 
 export function Profile({ goToPage }) {
   const featured = brands.slice(0, 4)
@@ -84,13 +93,13 @@ export function Profile({ goToPage }) {
 
             {/* Services strip */}
             <div className="mt-10 flex flex-wrap gap-3">
-              {serviceGlyphs.map((Glyph, i) => (
+              {serviceStrip.map(({ label, Glyph }) => (
                 <span
-                  key={i}
+                  key={label}
                   className="inline-flex items-center gap-2 border border-line bg-alt/40 px-3 py-2 font-mono text-[10px] uppercase tracking-widest text-ink-2"
                 >
                   <Glyph className="h-3.5 w-3.5 text-brand" />
-                  {['Shoot', 'Post', 'Events', 'Edit', 'Scripts'][i]}
+                  {label}
                 </span>
               ))}
             </div>
@@ -98,6 +107,7 @@ export function Profile({ goToPage }) {
             {/* CTAs */}
             <div className="mt-8 flex flex-wrap gap-3">
               <button
+                type="button"
                 onClick={() => goToPage('services')}
                 className="cursor-pointer bg-brand px-5 py-3 font-display text-xs font-bold uppercase tracking-widest text-on-brand transition-colors hover:bg-brand"
               >
@@ -112,6 +122,26 @@ export function Profile({ goToPage }) {
                 Start a project
               </a>
             </div>
+
+            {/* Kit strip — sits directly under the two calls to action. */}
+            <figure className="mt-10">
+              <div className="grad-border overflow-hidden bg-card">
+                <img
+                  src="/img/tools.webp"
+                  alt="Cameras, a tripod, a shotgun microphone, an LED light panel, a drone, a clapperboard and a phone — the videography kit used on Alec Visuals jobs."
+                  width="2000"
+                  height="700"
+                  decoding="async"
+                  className="w-full"
+                />
+              </div>
+              <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2">
+                <span className="eyebrow">The kit</span>
+                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-2">
+                  Everything I shoot with, on every job
+                </span>
+              </figcaption>
+            </figure>
           </div>
 
           {/* ---- Portrait ---- */}
@@ -121,8 +151,11 @@ export function Profile({ goToPage }) {
               alt={`${profile.name} — ${profile.brand}`}
               className="h-full w-full object-cover object-top"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-alt via-alt/20 to-transparent" />
-            <div className="absolute bottom-0 left-0 right-0 border-t border-line/10 bg-alt/70 p-5 backdrop-blur">
+            {/* Scrim confined to the lower half. Spanning the whole frame put a
+                veil over the subject, which read as a blurry photo in light
+                mode where `--c-alt` is near-white. */}
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-alt via-alt/35 to-transparent" />
+            <div className="absolute bottom-0 left-0 right-0 border-t border-line/10 bg-alt/90 p-5 backdrop-blur-none dark:bg-alt/70 dark:backdrop-blur-md">
               <p className="eyebrow">{profile.role}</p>
               <h2 className="mt-2 font-display text-3xl font-black text-ink">
                 {profile.name}
@@ -145,45 +178,12 @@ export function Profile({ goToPage }) {
         </div>
       </section>
 
-      {/* ================= KIT ================= */}
-      <section className="relative overflow-hidden border-b border-line bg-base px-5 py-12 sm:py-16 lg:px-10">
-        <div className="pointer-events-none absolute left-1/2 top-0 h-40 w-[70%] -translate-x-1/2 rounded-full bg-azure/10 blur-[120px]" />
-
-        <div className="relative mx-auto w-full max-w-[1400px]">
-          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="eyebrow mb-3">The kit</p>
-              <h2 className="font-display text-3xl font-black leading-tight text-ink sm:text-4xl">
-                Everything I shoot with,{' '}
-                <span className="grad-text">on every job.</span>
-              </h2>
-            </div>
-            <p className="max-w-sm text-sm leading-7 text-muted">
-              Cinema bodies, a proper shotgun mic and enough light to keep the
-              image clean whether we are on a set or on location.
-            </p>
-          </div>
-
-          <div className="grad-border overflow-hidden bg-card">
-            <img
-              src="/img/tools.webp"
-              alt="Cameras, a tripod, a shotgun microphone, an LED light panel, a drone, a clapperboard and a phone — the videography kit used on Alec Visuals jobs."
-              width="2000"
-              height="700"
-              loading="lazy"
-              decoding="async"
-              className="w-full"
-            />
-          </div>
-        </div>
-      </section>
-
       {/* ================= BY SECTOR ================= */}
       <Sectors goToPage={goToPage} />
 
       {/* ================= STORIES ================= */}
       <section className="border-b border-line bg-alt px-5 py-16 lg:px-10">
-        <div className="w-full max-w-4xl">
+        <div className="mx-auto w-full max-w-[1400px]">
           <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
             <div>
               <p className="eyebrow mb-5">The work behind the pages</p>
@@ -192,6 +192,7 @@ export function Profile({ goToPage }) {
               </h2>
             </div>
             <button
+              type="button"
               onClick={() => goToPage('services')}
               className="inline-flex cursor-pointer items-center gap-2 text-left font-mono text-xs uppercase tracking-widest text-muted transition-colors hover:text-brand"
             >
@@ -199,9 +200,14 @@ export function Profile({ goToPage }) {
             </button>
           </div>
 
-          <div className="divide-y divide-line/10">
+          {/* Two columns from lg up; the divider only makes sense in a single
+              column, so each cell carries its own border instead. */}
+          <div className="grid gap-x-10 gap-y-4 md:grid-cols-2">
             {brands.slice(0, 4).map((b) => (
-              <article key={b.id} className="reveal py-12 first:pt-0">
+              <article
+                key={b.id}
+                className="reveal border-t border-line/10 py-10 first:border-t-0 md:[&:nth-child(-n+2)]:border-t-0 md:[&:nth-child(-n+2)]:pt-0"
+              >
                 <a
                   href={b.url}
                   target="_blank"

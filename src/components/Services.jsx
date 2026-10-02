@@ -41,15 +41,17 @@ export function Services({ goToPage }) {
             />
           </div>
 
-          <div className="mt-16 grid border border-line bg-line md:grid-cols-2">
+          {/* A real gap with individually bordered cards, rather than a single
+              bordered box whose edges butt the six images together. */}
+          <div className="mt-16 grid gap-6 md:grid-cols-2">
             {services.map((s) => {
               const art = `/img/service-${s.id.replace('serv-', '')}.webp`
               return (
                 <article
                   key={s.id}
-                  className="reveal group flex flex-col bg-card transition-colors hover:bg-card-hover"
+                  className="grad-border reveal group flex flex-col bg-card transition-colors hover:bg-card-hover"
                 >
-                  <div className="relative overflow-hidden border-b border-line">
+                  <div className="relative overflow-hidden">
                     <img
                       src={art}
                       alt=""
@@ -57,7 +59,7 @@ export function Services({ goToPage }) {
                       height="768"
                       loading="lazy"
                       decoding="async"
-                      className="h-56 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] sm:h-64"
+                      className="h-60 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] sm:h-72"
                     />
                   </div>
 
@@ -83,9 +85,20 @@ export function Services({ goToPage }) {
                       ))}
                     </ul>
 
-                    <p className="mt-6 inline-block self-start grad-border grad-border-soft px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
-                      {s.tag}
-                    </p>
+                    <div className="mt-6 flex flex-wrap items-center gap-3 self-start">
+                      <p className="inline-block grad-border grad-border-soft px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-brand">
+                        {s.tag}
+                      </p>
+                      {/* The cards carry hover states, so they need a real
+                          action rather than reading as a dead control. */}
+                      <button
+                        type="button"
+                        onClick={() => goToPage('contact')}
+                        className="inline-flex cursor-pointer items-center gap-1.5 border border-line px-3 py-1 font-mono text-[10px] uppercase tracking-[0.24em] text-muted transition-colors hover:border-brand hover:text-ink"
+                      >
+                        Enquire <ArrowRight className="h-3 w-3" />
+                      </button>
+                    </div>
                   </div>
                 </article>
               )
@@ -110,6 +123,7 @@ export function Services({ goToPage }) {
             </p>
 
             <button
+              type="button"
               onClick={() => goToPage('contact')}
               className="mt-8 inline-flex cursor-pointer items-center gap-2 border border-line bg-card px-5 py-3 font-display text-xs font-bold uppercase tracking-widest text-ink-2 transition-colors hover:border-brand hover:text-ink"
             >

@@ -1,32 +1,46 @@
 /**
- * Header / footer mark.
+ * Header / footer / splash mark.
  *
- * Alec supplied a logo with a pale background on a square canvas. In the
- * light theme the original is shown untouched; in the dark theme the
- * background-keyed variant from scripts/make-logo-transparent.py is used
- * instead, so the mark sits directly on the dark background. Both files are
- * cropped to the same box, so the mark does not resize when toggling.
+ * Alec supplied a logo with a pale background and a near-black mark on a
+ * square canvas. scripts/make-logo-transparent.py now produces two tightly
+ * cropped, identically framed variants:
+ *
+ *   /logo.png       the original artwork, pale background kept  (light theme)
+ *   /logo-dark.png  the mark knocked out to solid white, alpha 0 elsewhere
+ *
+ * The knockout matters: the source mark averages ~54/255 luminance, so merely
+ * removing the background leaves artwork that disappears into the #05080F
+ * dark surface. Reversing it to white measures ~13.5:1 against that
+ * background instead.
+ *
+ * `tone="dark"` pins the white knockout regardless of theme, for use on the
+ * blue gradient nav and anywhere else with a dark or saturated backdrop.
  */
-export function Logo({ className = 'h-10 w-auto' }) {
+export function Logo({ className = 'h-10 w-auto', tone = 'auto' }) {
+  const showLight = tone === 'auto'
+  const showDark = tone === 'dark' || tone === 'auto'
+
   return (
     <>
-      {/* Light theme: Alec's original file, pale background intact. */}
-      <img
-        src="/logo.png"
-        alt="Alec Visuals"
-        width="320"
-        height="320"
-        className={`object-contain dark:hidden ${className}`}
-      />
-      {/* Dark theme: background keyed out to transparency. */}
-      <img
-        src="/logo-dark.png"
-        alt=""
-        aria-hidden="true"
-        width="320"
-        height="320"
-        className={`object-contain dark:block ${className} hidden`}
-      />
+      {showLight && (
+        <img
+          src="/logo.png"
+          alt="Alec Visuals"
+          width="512"
+          height="392"
+          className={`object-contain dark:hidden ${className}`}
+        />
+      )}
+      {showDark && (
+        <img
+          src="/logo-dark.png"
+          alt={showLight ? '' : 'Alec Visuals'}
+          aria-hidden={showLight ? 'true' : undefined}
+          width="512"
+          height="392"
+          className={`object-contain ${showLight ? 'hidden dark:block' : ''} ${className}`}
+        />
+      )}
     </>
   )
 }

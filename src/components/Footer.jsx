@@ -6,6 +6,7 @@ export function Footer({ onView }) {
     <footer className="border-t border-line bg-alt px-5 py-8">
       <div className="flex w-full flex-col gap-5 text-xs text-muted-2 md:flex-row md:items-center md:justify-between">
         <button
+          type="button"
           onClick={() => onView('profile')}
           className="flex cursor-pointer items-center gap-4 text-left"
         >

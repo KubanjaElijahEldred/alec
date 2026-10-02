@@ -23,7 +23,7 @@ export const profile = {
 
 export const stats = [
   { value: '12', label: 'Brands served' },
-  { value: '4', label: 'Core services' },
+  { value: '6', label: 'Core services' },
   { value: '2', label: 'Platforms managed' },
 ]
 
