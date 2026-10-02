@@ -1,0 +1,247 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-dark-bg font-sans text-gray-400 antialiased;
+    background-image:
+      radial-gradient(900px 500px at 12% -8%, rgba(46, 107, 255, 0.14), transparent 60%),
+      radial-gradient(760px 460px at 92% 4%, rgba(255, 122, 24, 0.1), transparent 62%);
+    background-attachment: fixed;
+  }
+
+  ::selection {
+    @apply bg-brand text-white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #05080f;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #1b2637;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #ff7a18;
+  }
+}
+
+@layer components {
+  /* ---- Eyebrow label ---- */
+  .eyebrow {
+    @apply font-mono text-[10px] uppercase text-brand;
+    letter-spacing: 0.34em;
+  }
+
+  /* ---- Gradient text (orange -> blue -> white) ---- */
+  .grad-text {
+    background-image: linear-gradient(
+      100deg,
+      #ff7a18 0%,
+      #ffa45c 18%,
+      #2e6bff 52%,
+      #6fa0ff 70%,
+      #ffffff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ---- Gradient text on hover ---- */
+  .grad-text-hover {
+    @apply text-white;
+    transition: background-image 0.4s ease, -webkit-text-fill-color 0.4s ease;
+  }
+  .grad-text-hover:hover {
+    background-image: linear-gradient(
+      100deg,
+      #ff7a18 0%,
+      #ffa45c 20%,
+      #2e6bff 60%,
+      #ffffff 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  /* ---- Gradient hairline border (crisp, rounded-safe) ---- */
+  .grad-border {
+    position: relative;
+    border-radius: inherit;
+  }
+  .grad-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      135deg,
+      #ff7a18 0%,
+      #ffa45c 22%,
+      #2e6bff 55%,
+      #6fa0ff 74%,
+      rgba(255, 255, 255, 0.55) 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    opacity: 0.85;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+  }
+  .group:hover .grad-border::before,
+  .grad-border:hover::before {
+    opacity: 1;
+  }
+
+  /* Softer variant for small chips / tags */
+  .grad-border-soft::before {
+    opacity: 0.55;
+  }
+
+  /* ---- Gradient underline sweep on links ---- */
+  .grad-underline {
+    @apply relative;
+  }
+  .grad-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1px;
+    width: 100%;
+    transform: scaleX(0);
+    transform-origin: left;
+    background: linear-gradient(90deg, #ff7a18, #2e6bff, #ffffff);
+    transition: transform 0.3s ease;
+  }
+  .grad-underline:hover::after {
+    transform: scaleX(1);
+  }
+
+  /* ---- Scroll reveal ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal.is-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ---- Grid texture overlay ---- */
+  .grid-lines {
+    background-image:
+      linear-gradient(90deg, rgba(111, 160, 255, 0.07) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(111, 160, 255, 0.05) 1px, transparent 1px);
+    background-size: 72px 72px;
+  }
+
+  /* ---- Social FAB ---- */
+  .socialfab {
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+  }
+  .socialfab > * {
+    pointer-events: auto;
+  }
+  .socialfab__btn {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+    color: #fff;
+    background:
+      linear-gradient(135deg, #ff7a18 0%, #ffa45c 20%, #2e6bff 58%, #6fa0ff 78%, #ffffff 100%);
+    box-shadow:
+      0 10px 30px rgba(46, 107, 255, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.5);
+    transition:
+      transform 0.2s ease,
+      box-shadow 0.3s ease;
+  }
+  .socialfab__btn:hover {
+    transform: scale(1.06);
+    box-shadow:
+      0 14px 40px rgba(255, 122, 24, 0.4),
+      0 2px 10px rgba(0, 0, 0, 0.5);
+  }
+  .socialfab__btn:active {
+    cursor: grabbing;
+    transform: scale(0.97);
+  }
+  .socialfab__btn.is-open {
+    background: #0b1220;
+    border: 1px solid #1b2637;
+  }
+  .socialfab__grip {
+    position: absolute;
+    right: 7px;
+    bottom: 7px;
+    color: rgba(255, 255, 255, 0.65);
+  }
+  .socialfab__badge {
+    position: absolute;
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 9999px;
+    color: #fff;
+    background: color-mix(in srgb, var(--tone) 88%, #05080f 12%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    transition:
+      transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+      opacity 0.35s ease;
+  }
+  .socialfab__badge:hover {
+    transform: scale(1.12);
+  }
+
+  /* ---- Map frame ---- */
+  .map-frame iframe {
+    display: block;
+    filter: grayscale(0.35) contrast(1.05) brightness(0.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  * {
+    animation-duration: 0.01ms !important;
+  }
+}
