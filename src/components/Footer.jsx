@@ -3,8 +3,8 @@ import { profile } from '../data'
 
 export function Footer({ onView }) {
   return (
-    <footer className="border-t border-border-card bg-black px-5 py-8">
-      <div className="flex w-full flex-col gap-5 text-xs text-gray-500 md:flex-row md:items-center md:justify-between">
+    <footer className="border-t border-line bg-alt px-5 py-8">
+      <div className="flex w-full flex-col gap-5 text-xs text-muted-2 md:flex-row md:items-center md:justify-between">
         <button
           onClick={() => onView('profile')}
           className="flex cursor-pointer items-center gap-4 text-left"

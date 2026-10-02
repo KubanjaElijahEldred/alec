@@ -37,6 +37,27 @@
       rel="stylesheet"
     />
     <title>Alex Kisaakye — Alec Visuals | Videography & Content Creation</title>
+    <script>
+      // Resolve the theme before first paint so the page never flashes the
+      // wrong background on load.
+      ;(function () {
+        try {
+          var saved = localStorage.getItem('alec-theme')
+          var theme =
+            saved === 'dark' || saved === 'light'
+              ? saved
+              : window.matchMedia('(prefers-color-scheme: light)').matches
+                ? 'light'
+                : 'dark'
+          if (theme === 'dark') document.documentElement.classList.add('dark')
+          document.documentElement.style.colorScheme = theme
+          var m = document.querySelector('meta[name="theme-color"]')
+          if (m) m.setAttribute('content', theme === 'dark' ? '#05080F' : '#FFFFFF')
+        } catch (e) {
+          document.documentElement.classList.add('dark')
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

@@ -116,7 +116,7 @@ export function SplashScreen({ onDone }) {
 
   return (
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-dark-bg"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-base"
       initial={{ opacity: 1 }}
       animate={exiting ? { opacity: 0, scale: 1.04 } : { opacity: 1, scale: 1 }}
       transition={{ duration: 0.7, ease: 'easeInOut' }}
@@ -131,7 +131,7 @@ export function SplashScreen({ onDone }) {
       <div className="splash-scan pointer-events-none absolute inset-x-0 h-32 bg-gradient-to-b from-transparent via-azure/8 to-transparent" />
 
       {/* ---------- Top HUD ---------- */}
-      <div className="absolute inset-x-0 top-0 flex items-center justify-between px-5 font-mono text-[10px] uppercase tracking-[0.3em] text-gray-500 sm:px-10">
+      <div className="absolute inset-x-0 top-0 flex items-center justify-between px-5 font-mono text-[10px] uppercase tracking-[0.3em] text-muted-2 sm:px-10">
         <span className="flex items-center gap-2">
           <span className="splash-rec inline-block h-2 w-2 rounded-full bg-brand" />
           REC
@@ -149,7 +149,7 @@ export function SplashScreen({ onDone }) {
           </div>
           {/* Static outer ring */}
           <div
-            className="absolute inset-2 rounded-full border border-dashed border-white/10"
+            className="absolute inset-2 rounded-full border border-dashed border-line/10"
             style={{ animation: 'splash-spin 26s linear infinite' }}
           />
 
@@ -169,7 +169,7 @@ export function SplashScreen({ onDone }) {
 
         {/* Title */}
         <motion.h1
-          className="mt-9 text-center font-display text-2xl font-black tracking-[0.18em] text-white sm:text-3xl"
+          className="mt-9 text-center font-display text-2xl font-black tracking-[0.18em] text-ink sm:text-3xl"
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6, duration: 0.6 }}
@@ -178,7 +178,7 @@ export function SplashScreen({ onDone }) {
         </motion.h1>
 
         <motion.p
-          className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-gray-500"
+          className="mt-3 text-center font-mono text-[10px] uppercase tracking-[0.3em] text-muted-2"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.9, duration: 0.6 }}
@@ -219,28 +219,28 @@ export function SplashScreen({ onDone }) {
         <div className="splash-sprockets mb-3 h-3 w-full overflow-hidden opacity-25" aria-hidden="true" />
 
         {/* Scrubber */}
-        <div className="relative h-1 w-full bg-white/8">
+        <div className="relative h-1 w-full bg-ink/8">
           <div
             className="absolute inset-y-0 left-0 bg-gradient-to-r from-brand via-azure to-white"
             style={{ width: `${pct}%` }}
           />
           {/* Playhead */}
           <div
-            className="absolute top-1/2 h-4 w-[2px] -translate-y-1/2 bg-white shadow-[0_0_10px_rgba(255,255,255,0.8)]"
+            className="absolute top-1/2 h-4 w-[2px] -translate-y-1/2 bg-ink shadow-[0_0_10px_rgba(255,255,255,0.8)]"
             style={{ left: `${pct}%` }}
           />
           {/* Keyframes */}
           {[25, 50, 75].map((k) => (
             <span
               key={k}
-              className="absolute top-1/2 h-2 w-[2px] -translate-y-1/2 bg-white/25"
+              className="absolute top-1/2 h-2 w-[2px] -translate-y-1/2 bg-ink/25"
               style={{ left: `${k}%` }}
             />
           ))}
         </div>
 
         {/* Meta row */}
-        <div className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.24em] text-gray-500">
+        <div className="mt-3 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.24em] text-muted-2">
           <span className="flex items-center gap-3">
             <Film className="h-3.5 w-3.5 text-brand" />
             Loading reel
@@ -252,7 +252,7 @@ export function SplashScreen({ onDone }) {
           </span>
           <span className="tabular-nums">
             {String(pct).padStart(3, '0')}%{' '}
-            <span className="hidden text-gray-600 sm:inline">
+            <span className="hidden text-faint sm:inline">
               · {secondsLeft}s left
             </span>
           </span>
@@ -268,7 +268,7 @@ export function SplashScreen({ onDone }) {
           setExiting(true)
           setTimeout(onDone, 750)
         }}
-        className={`absolute right-5 top-14 border border-border-card bg-card-bg/80 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.24em] text-gray-500 backdrop-blur transition-all duration-500 hover:border-brand hover:text-white sm:right-10 ${
+        className={`absolute right-5 top-14 border border-line bg-card/80 px-3 py-1.5 font-mono text-[9px] uppercase tracking-[0.24em] text-muted-2 backdrop-blur transition-all duration-500 hover:border-brand hover:text-ink sm:right-10 ${
           canSkip ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'
         }`}
       >

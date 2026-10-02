@@ -3,3 +3,5 @@ dist
 .vercel
 .DS_Store
 *.local
+__pycache__/
+*.pyc

@@ -2,6 +2,54 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ==========================================================================
+   Theme tokens
+   Light is the default; the `dark` class on <html> flips every value.
+   ========================================================================== */
+:root {
+  --c-base: 255 255 255;
+  --c-alt: 246 248 252;
+  --c-card: 255 255 255;
+  --c-card-hover: 255 245 236;
+  --c-line: 223 229 240;
+  --c-ink: 8 15 28;
+  --c-ink-2: 23 34 54;
+  --c-muted: 74 87 110;
+  --c-muted-2: 97 110 133;
+  --c-faint: 132 144 166;
+  --c-on-brand: 255 255 255;
+  --c-glow-a: rgba(46, 107, 255, 0.1);
+  --c-glow-b: rgba(255, 122, 24, 0.09);
+  --c-scroll-track: #eef1f7;
+  --c-scroll-thumb: #c7d0e0;
+  --c-grad-end: 8 15 28;
+  --c-brand-soft: 199 79 0;
+  --c-azure-soft: 26 74 190;
+  color-scheme: light;
+}
+
+.dark {
+  --c-base: 5 8 15;
+  --c-alt: 0 0 0;
+  --c-card: 11 18 32;
+  --c-card-hover: 14 22 38;
+  --c-line: 27 38 55;
+  --c-ink: 255 255 255;
+  --c-ink-2: 229 236 247;
+  --c-muted: 156 166 182;
+  --c-muted-2: 138 149 168;
+  --c-faint: 100 112 133;
+  --c-on-brand: 255 255 255;
+  --c-glow-a: rgba(46, 107, 255, 0.14);
+  --c-glow-b: rgba(255, 122, 24, 0.1);
+  --c-scroll-track: #05080f;
+  --c-scroll-thumb: #1b2637;
+  --c-grad-end: 255 255 255;
+  --c-brand-soft: 255 164 92;
+  --c-azure-soft: 111 160 255;
+  color-scheme: dark;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
@@ -9,25 +57,28 @@
   }
 
   body {
-    @apply bg-dark-bg font-sans text-gray-400 antialiased;
+    @apply bg-base font-sans text-muted antialiased;
     background-image:
-      radial-gradient(900px 500px at 12% -8%, rgba(46, 107, 255, 0.14), transparent 60%),
-      radial-gradient(760px 460px at 92% 4%, rgba(255, 122, 24, 0.1), transparent 62%);
+      radial-gradient(900px 500px at 12% -8%, var(--c-glow-a), transparent 60%),
+      radial-gradient(760px 460px at 92% 4%, var(--c-glow-b), transparent 62%);
     background-attachment: fixed;
+    transition:
+      background-color 0.35s ease,
+      color 0.35s ease;
   }
 
   ::selection {
-    @apply bg-brand text-white;
+    @apply bg-brand text-on-brand;
   }
 
   ::-webkit-scrollbar {
     width: 10px;
   }
   ::-webkit-scrollbar-track {
-    background: #05080f;
+    background: var(--c-scroll-track);
   }
   ::-webkit-scrollbar-thumb {
-    background: #1b2637;
+    background: var(--c-scroll-thumb);
   }
   ::-webkit-scrollbar-thumb:hover {
     background: #ff7a18;
@@ -41,7 +92,7 @@
     letter-spacing: 0.34em;
   }
 
-  /* ---- Gradient text (orange -> blue -> white) ---- */
+  /* ---- Gradient text (orange -> blue -> ink) ---- */
   .grad-text {
     background-image: linear-gradient(
       100deg,
@@ -49,7 +100,7 @@
       #ffa45c 18%,
       #2e6bff 52%,
       #6fa0ff 70%,
-      #ffffff 100%
+      rgb(var(--c-grad-end) / 1) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -59,7 +110,7 @@
 
   /* ---- Gradient text on hover ---- */
   .grad-text-hover {
-    @apply text-white;
+    @apply text-ink;
     transition: background-image 0.4s ease, -webkit-text-fill-color 0.4s ease;
   }
   .grad-text-hover:hover {
@@ -68,7 +119,7 @@
       #ff7a18 0%,
       #ffa45c 20%,
       #2e6bff 60%,
-      #ffffff 100%
+      rgb(var(--c-grad-end) / 1) 100%
     );
     -webkit-background-clip: text;
     background-clip: text;
@@ -93,7 +144,7 @@
       #ffa45c 22%,
       #2e6bff 55%,
       #6fa0ff 74%,
-      rgba(255, 255, 255, 0.55) 100%
+      rgb(var(--c-grad-end) / 0.55) 100%
     );
     -webkit-mask:
       linear-gradient(#000 0 0) content-box,
@@ -130,7 +181,7 @@
     width: 100%;
     transform: scaleX(0);
     transform-origin: left;
-    background: linear-gradient(90deg, #ff7a18, #2e6bff, #ffffff);
+    background: linear-gradient(90deg, #ff7a18, #2e6bff, rgb(var(--c-grad-end) / 1));
     transition: transform 0.3s ease;
   }
   .grad-underline:hover::after {
@@ -200,8 +251,14 @@
     transform: scale(0.97);
   }
   .socialfab__btn.is-open {
-    background: #0b1220;
-    border: 1px solid #1b2637;
+    background: rgb(var(--c-card));
+    border: 1px solid rgb(var(--c-line));
+    box-shadow:
+      0 10px 30px rgba(46, 107, 255, 0.25),
+      0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+  .socialfab__btn.is-open .socialfab__grip {
+    color: rgb(var(--c-faint));
   }
   .socialfab__grip {
     position: absolute;
@@ -217,8 +274,8 @@
     place-items: center;
     border-radius: 9999px;
     color: #fff;
-    background: color-mix(in srgb, var(--tone) 88%, #05080f 12%);
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    background: color-mix(in srgb, var(--tone) 88%, rgb(var(--c-base)) 12%);
+    border: 1px solid rgb(var(--c-line) / 0.9);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     transition:
       transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
@@ -228,10 +285,25 @@
     transform: scale(1.12);
   }
 
+  /* On phones the FAB shrinks so it does not cover the content. */
+  @media (max-width: 419px) {
+    .socialfab__btn {
+      width: 48px;
+      height: 48px;
+    }
+    .socialfab__badge {
+      width: 44px;
+      height: 44px;
+    }
+  }
+
   /* ---- Map frame ---- */
   .map-frame iframe {
     display: block;
     filter: grayscale(0.35) contrast(1.05) brightness(0.94);
+  }
+  :root:not(.dark) .map-frame iframe {
+    filter: grayscale(0.2) contrast(1.02) brightness(1.02);
   }
 
   /* ---- Splash screen ---- */

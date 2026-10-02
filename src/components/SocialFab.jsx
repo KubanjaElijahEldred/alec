@@ -10,6 +10,18 @@ const STORE_KEY = 'alec-social-fab-pos'
 
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
 
+/** Keep a position fully inside the viewport, whatever size it was saved at. */
+function fitToViewport({ x, y }) {
+  const vw = window.innerWidth
+  const vh = window.innerHeight
+  // Below this width the button would cover most of the screen, so shrink it.
+  const size = vw < 420 ? 48 : SIZE
+  return {
+    x: clamp(Number.isFinite(x) ? x : MARGIN, MARGIN, Math.max(MARGIN, vw - size - MARGIN)),
+    y: clamp(Number.isFinite(y) ? y : MARGIN, MARGIN, Math.max(MARGIN, vh - size - MARGIN)),
+  }
+}
+
 /**
  * Draggable social-media button.
  *
@@ -19,13 +31,18 @@ const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v))
 export function SocialFab() {
   const [open, setOpen] = useState(false)
   const [pos, setPos] = useState(() => {
+    let next = { x: 16, y: 16 }
     try {
       const saved = JSON.parse(localStorage.getItem(STORE_KEY) || 'null')
-      if (saved && Number.isFinite(saved.x)) return saved
+      if (saved && Number.isFinite(saved.x) && Number.isFinite(saved.y)) {
+        next = saved
+      }
     } catch {
       /* ignore */
     }
-    return { x: 16, y: 16 }
+    // The saved position may come from a much wider screen (desktop) and
+    // would sit outside a phone viewport, so clamp it on first paint too.
+    return fitToViewport(next)
   })
 
   const wrapRef = useRef(null)
@@ -49,16 +66,19 @@ export function SocialFab() {
     }
   }, [open])
 
-  // Keep the button inside the viewport after a resize.
+  // Keep the button inside the viewport after a resize or rotation.
   useEffect(() => {
-    const onResize = () =>
-      setPos((p) => ({
-        x: clamp(p.x, MARGIN, window.innerWidth - SIZE - MARGIN),
-        y: clamp(p.y, MARGIN, window.innerHeight - SIZE - MARGIN),
-      }))
+    const onResize = () => setPos((p) => fitToViewport(p))
     window.addEventListener('resize', onResize)
-    return () => window.removeEventListener('resize', onResize)
+    window.addEventListener('orientationchange', onResize)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      window.removeEventListener('orientationchange', onResize)
+    }
   }, [])
+
+  // Buttons must stay tappable above the iOS home indicator.
+  const btnSize = window.innerWidth < 420 ? 48 : SIZE
 
   const onPointerDown = (e) => {
     const r = btnRef.current.getBoundingClientRect()
@@ -68,8 +88,8 @@ export function SocialFab() {
 
   const onPointerMove = (e) => {
     if (!drag.current.active) return
-    const x = clamp(e.clientX - drag.current.ox, MARGIN, window.innerWidth - SIZE - MARGIN)
-    const y = clamp(e.clientY - drag.current.oy, MARGIN, window.innerHeight - SIZE - MARGIN)
+    const x = clamp(e.clientX - drag.current.ox, MARGIN, window.innerWidth - btnSize - MARGIN)
+    const y = clamp(e.clientY - drag.current.oy, MARGIN, window.innerHeight - btnSize - MARGIN)
 
     if (Math.abs(e.movementX) + Math.abs(e.movementY) > 2) {
       if (!drag.current.moved && open) setOpen(false)
@@ -93,8 +113,8 @@ export function SocialFab() {
   }
 
   /* ---- Radial fan layout ---- */
-  const cx = pos.x + SIZE / 2
-  const cy = pos.y + SIZE / 2
+  const cx = pos.x + btnSize / 2
+  const cy = pos.y + btnSize / 2
   const vw = window.innerWidth
   const vh = window.innerHeight
 
@@ -107,15 +127,19 @@ export function SocialFab() {
   const step = spread / (socialLinks.length - 1)
   const rad = (deg) => (deg * Math.PI) / 180
 
+  // Tighten the fan on phones so every badge stays on screen and tappable.
+  const reach = vw < 420 ? 88 : 120
+  const badgeSize = vw < 420 ? 44 : BADGE
+
   // Pull the fan back inside the viewport if it overflows top or bottom.
   for (let i = 0; i < 36; i++) {
     let over = 0
     let under = 0
 
     for (let k = 0; k < socialLinks.length; k++) {
-      const a = cy + 120 * Math.sin(rad(angle - spread / 2 + step * k))
-      over = Math.max(over, a + BADGE / 2 - (vh - MARGIN))
-      under = Math.max(under, MARGIN + BADGE / 2 - a)
+      const a = cy + reach * Math.sin(rad(angle - spread / 2 + step * k))
+      over = Math.max(over, a + badgeSize / 2 - (vh - MARGIN))
+      under = Math.max(under, MARGIN + badgeSize / 2 - a)
     }
 
     if (over === 0 && under === 0) break
@@ -126,8 +150,8 @@ export function SocialFab() {
     const a = rad(angle - spread / 2 + step * i)
     return {
       ...link,
-      x: clamp(cx + 120 * Math.cos(a) - BADGE / 2, MARGIN, vw - BADGE - MARGIN),
-      y: clamp(cy + 120 * Math.sin(a) - BADGE / 2, MARGIN, vh - BADGE - MARGIN),
+      x: clamp(cx + reach * Math.cos(a) - badgeSize / 2, MARGIN, vw - badgeSize - MARGIN),
+      y: clamp(cy + reach * Math.sin(a) - badgeSize / 2, MARGIN, vh - badgeSize - MARGIN),
       delay: i * 45,
     }
   })

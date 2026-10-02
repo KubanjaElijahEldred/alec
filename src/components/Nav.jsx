@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X, Menu } from 'lucide-react'
 import { Logo } from './Logo'
-import { profile } from '../data'
+import { ThemeToggle } from './ThemeToggle'
+import { WhatsAppBadge } from './WhatsAppBadge'
 
 const VIEWS = [
   { id: 'profile', label: 'Profile' },
@@ -37,7 +38,7 @@ export function Nav({ view, onView }) {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-border-card bg-dark-bg/92 backdrop-blur-md">
+      <header className="fixed inset-x-0 top-0 z-50 h-20 border-b border-line bg-base/92 backdrop-blur-md">
         <div className="flex h-20 w-full items-center justify-between px-5 lg:px-10">
           <button
             onClick={() => go('profile')}
@@ -54,36 +55,23 @@ export function Nav({ view, onView }) {
                 onClick={() => go(v.id)}
                 className={`cursor-pointer px-4 py-2 font-mono text-[10px] uppercase tracking-[0.24em] transition-colors ${
                   view === v.id
-                    ? 'bg-brand text-white'
-                    : 'border border-border-card text-gray-400 hover:border-brand/60 hover:text-white'
+                    ? 'bg-brand text-on-brand'
+                    : 'border border-line text-muted hover:border-brand/60 hover:text-ink'
                 }`}
               >
                 {v.label}
               </button>
             ))}
-            <a
-              href={profile.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white px-4 py-2 font-display text-xs font-bold uppercase tracking-widest text-black transition-colors hover:bg-brand hover:text-white"
-            >
-              Work with me
-            </a>
+            <ThemeToggle />
+            <WhatsAppBadge className="px-4 py-2 text-xs" />
           </div>
 
           <div className="flex items-center gap-2 md:hidden">
-            <a
-              href={profile.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label="Work with me on WhatsApp"
-              className="grid h-9 w-9 place-items-center border border-border-card text-gray-300 transition-colors hover:border-brand hover:text-white"
-            >
-              <span className="font-mono text-[10px] font-bold">WA</span>
-            </a>
+            <ThemeToggle />
+            <WhatsAppBadge compact className="h-9 w-9 justify-center" />
             <button
               onClick={() => setOpen((o) => !o)}
-              className="nav__burger grid h-9 w-9 cursor-pointer place-items-center border border-border-card text-gray-300"
+              className="nav__burger grid h-9 w-9 cursor-pointer place-items-center border border-line text-ink-2"
               aria-label="Toggle menu"
               aria-expanded={open}
             >
@@ -100,7 +88,7 @@ export function Nav({ view, onView }) {
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
-            className="fixed inset-x-0 top-20 z-40 border-b border-border-card bg-dark-bg p-5 md:hidden"
+            className="fixed inset-x-0 top-20 z-40 border-b border-line bg-base p-5 md:hidden"
           >
             <div className="grid gap-3">
               {VIEWS.map((v) => (
@@ -109,21 +97,14 @@ export function Nav({ view, onView }) {
                   onClick={() => go(v.id)}
                   className={`cursor-pointer border px-4 py-3 text-left font-display font-bold ${
                     view === v.id
-                      ? 'border-brand bg-brand/10 text-white'
-                      : 'border-border-card text-white'
+                      ? 'border-brand bg-brand/10 text-ink'
+                      : 'border-line text-ink'
                   }`}
                 >
                   {v.label}
                 </button>
               ))}
-              <a
-                href={profile.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-white px-4 py-3 text-center font-display font-bold uppercase tracking-widest text-black"
-              >
-                Work with me
-              </a>
+              <WhatsAppBadge className="px-4 py-3 justify-center text-sm" />
             </div>
           </motion.div>
         )}

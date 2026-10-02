@@ -1,82 +1,33 @@
+/**
+ * Header / footer mark.
+ *
+ * Alec supplied a logo with a pale background on a square canvas. In the
+ * light theme the original is shown untouched; in the dark theme the
+ * background-keyed variant from scripts/make-logo-transparent.py is used
+ * instead, so the mark sits directly on the dark background. Both files are
+ * cropped to the same box, so the mark does not resize when toggling.
+ */
 export function Logo({ className = 'h-10 w-auto' }) {
   return (
-    <svg
-      viewBox="0 0 210 44"
-      className={className}
-      role="img"
-      aria-label="Alec Visuals"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <defs>
-        <linearGradient id="avLogoGrad" x1="0" y1="0" x2="64" y2="44">
-          <stop offset="0%" stopColor="#FF7A18" />
-          <stop offset="45%" stopColor="#FFA45C" />
-          <stop offset="100%" stopColor="#2E6BFF" />
-        </linearGradient>
-        <linearGradient id="avWordGrad" x1="0" y1="0" x2="210" y2="0">
-          <stop offset="0%" stopColor="#FFFFFF" />
-          <stop offset="55%" stopColor="#FFFFFF" />
-          <stop offset="100%" stopColor="#6FA0FF" />
-        </linearGradient>
-      </defs>
-
-      {/* AV monogram mark */}
-      <rect
-        x="1"
-        y="1"
-        width="42"
-        height="42"
-        rx="10"
-        fill="#05080F"
-        stroke="url(#avLogoGrad)"
-        strokeWidth="2"
+    <>
+      {/* Light theme: Alec's original file, pale background intact. */}
+      <img
+        src="/logo.png"
+        alt="Alec Visuals"
+        width="320"
+        height="320"
+        className={`object-contain dark:hidden ${className}`}
       />
-      <path
-        d="M11 31.5 L21 12.5 L31 31.5"
-        stroke="url(#avLogoGrad)"
-        strokeWidth="3"
-        strokeLinecap="square"
-        strokeLinejoin="miter"
+      {/* Dark theme: background keyed out to transparency. */}
+      <img
+        src="/logo-dark.png"
+        alt=""
+        aria-hidden="true"
+        width="320"
+        height="320"
+        className={`object-contain dark:block ${className} hidden`}
       />
-      <path
-        d="M15.2 25 H26.8"
-        stroke="url(#avLogoGrad)"
-        strokeWidth="2.4"
-        strokeLinecap="square"
-      />
-      <path
-        d="M33 31.5 V12.5"
-        stroke="url(#avLogoGrad)"
-        strokeWidth="3"
-        strokeLinecap="square"
-      />
-
-      {/* Wordmark */}
-      <text
-        x="54"
-        y="21"
-        fontFamily="Syne, sans-serif"
-        fontWeight="800"
-        fontSize="15"
-        letterSpacing="0.5"
-        fill="url(#avWordGrad)"
-      >
-        ALEC
-      </text>
-      <text
-        x="54"
-        y="36"
-        fontFamily="JetBrains Mono, monospace"
-        fontWeight="500"
-        fontSize="9.5"
-        letterSpacing="3.4"
-        fill="#FF7A18"
-      >
-        VISUALS
-      </text>
-      <rect x="126" y="27" width="80" height="1.5" fill="url(#avLogoGrad)" opacity="0.55" />
-    </svg>
+    </>
   )
 }
 
