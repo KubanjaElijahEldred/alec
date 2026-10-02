@@ -14,7 +14,7 @@ export const profile = {
   tiktok: 'https://www.tiktok.com/@alec.visuals',
   instagram: 'https://www.instagram.com/alecvisuals/',
   avatar: '/alec-tiktok-avatar.jpg',
-  portrait: '/profile.png',
+  portrait: '/profile.webp',
   mapsQuery:
     'https://www.google.com/maps/search/?api=1&query=Kampala%2C%20Uganda',
   directions:
