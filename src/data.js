@@ -28,6 +28,20 @@ export const stats = [
 ]
 
 /**
+ * Industry sectors the brand work falls into. `icon` maps to a lucide icon
+ * registered in components/SectorIcon.jsx.
+ */
+export const sectors = [
+  { id: 'food-drink', label: 'Food & Drink', icon: 'food', blurb: 'Kitchens, bakeries and delivery brands.' },
+  { id: 'wellness-beauty', label: 'Wellness & Beauty', icon: 'wellness', blurb: 'Spas, wellness centres and body care.' },
+  { id: 'hospitality', label: 'Hospitality', icon: 'hospitality', blurb: 'Venues, dining and guest experience.' },
+  { id: 'events', label: 'Events', icon: 'events', blurb: 'Live event coverage and recaps.' },
+  { id: 'healthcare', label: 'Healthcare', icon: 'healthcare', blurb: 'Hospitals and patient-facing content.' },
+  { id: 'motors', label: 'Motors', icon: 'motors', blurb: 'Vehicle sales and showroom content.' },
+  { id: 'creative', label: 'Creative & Digital', icon: 'creative', blurb: 'Studio production and digital work.' },
+]
+
+/**
  * Every brand below is linked to the exact social profile supplied by Alec.
  * `image` files in /public/brands were pulled from each profile's own
  * avatar, so every card renders a real, up-to-date brand picture.
@@ -35,6 +49,7 @@ export const stats = [
 export const brands = [
   {
     id: 'koko-digital-studios',
+    sector: 'creative',
     name: 'Koko Digital Studios',
     handle: '@koko_digital_studios',
     category: 'Digital studio',
@@ -47,6 +62,7 @@ export const brands = [
   },
   {
     id: 'oriki-uganda',
+    sector: 'wellness-beauty',
     name: 'ORÍKÌ Uganda',
     handle: '@orikispauganda',
     category: 'Spa & wellness',
@@ -59,6 +75,7 @@ export const brands = [
   },
   {
     id: 'le-memorial-wellness',
+    sector: 'wellness-beauty',
     name: 'Lè Memorial Wellness Center',
     handle: '@lememorialwellnesscenter',
     category: 'Wellness centre',
@@ -71,6 +88,7 @@ export const brands = [
   },
   {
     id: 'meat-n-bunz',
+    sector: 'food-drink',
     name: "Meat'N'Bunz UG",
     handle: '@meatnbunzug',
     category: 'Burgers & street food',
@@ -83,6 +101,7 @@ export const brands = [
   },
   {
     id: 'sarahs-cakes',
+    sector: 'food-drink',
     name: 'SarahsCakesUg',
     handle: '@sarahscakesug',
     category: 'Bakery & cakes',
@@ -95,6 +114,7 @@ export const brands = [
   },
   {
     id: 'bespoke-cakes-uganda',
+    sector: 'food-drink',
     name: 'Bespoke Cakes Uganda',
     handle: '@bespokecakesuganda',
     category: 'Custom cakes',
@@ -107,6 +127,7 @@ export const brands = [
   },
   {
     id: 'pak-fazal-motors',
+    sector: 'motors',
     name: 'Pak Fazal Motors',
     handle: '@pak.fazal.motors_ug',
     category: 'Motors & auto sales',
@@ -119,6 +140,7 @@ export const brands = [
   },
   {
     id: 'ooosha-body-care',
+    sector: 'wellness-beauty',
     name: 'Ooosha Body Care',
     handle: '@ooosha.body.care',
     category: 'Body care & cosmetics',
@@ -131,6 +153,7 @@ export const brands = [
   },
   {
     id: 'the-tree-house',
+    sector: 'hospitality',
     name: 'The Tree House',
     handle: '@thetreehouseentebbe',
     category: 'Venue & hospitality, Entebbe',
@@ -143,6 +166,7 @@ export const brands = [
   },
   {
     id: 'drinks-24-ug',
+    sector: 'food-drink',
     name: 'Drinks24 UG',
     handle: '@drinks_24_ug',
     category: 'Online drinks delivery',
@@ -155,6 +179,7 @@ export const brands = [
   },
   {
     id: 'ruby-hospital-kampala',
+    sector: 'healthcare',
     name: 'Ruby Hospital Kampala',
     handle: '@ruby.hospital.kampala',
     category: 'Healthcare',
@@ -167,6 +192,7 @@ export const brands = [
   },
   {
     id: 'vibez-nzuri',
+    sector: 'events',
     name: 'Vibez Nzuri',
     handle: '@nzurivibez',
     category: 'Events & entertainment',

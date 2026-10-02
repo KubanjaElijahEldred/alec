@@ -1,10 +1,6 @@
-import { useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowRight,
   ArrowUpRight,
-  ArrowUp,
-  ChevronDown,
   Clapperboard,
   Repeat,
   PartyPopper,
@@ -13,15 +9,13 @@ import {
 } from 'lucide-react'
 import { Logo } from './Logo'
 import { BrandCard } from './BrandCard'
+import { Sectors } from './Sectors'
 import { brands, profile, stats } from '../data'
 
 const serviceGlyphs = [Clapperboard, Repeat, PartyPopper, Scissors, PenTool]
 
 export function Profile({ goToPage }) {
-  const [showAll, setShowAll] = useState(false)
   const featured = brands.slice(0, 4)
-  const extended = brands.slice(4)
-  const more = brands.slice(4)
 
   return (
     <div>
@@ -146,29 +140,8 @@ export function Profile({ goToPage }) {
         </div>
       </section>
 
-      {/* ================= ALL BRANDS ================= */}
-      <section className="border-b border-border-card bg-black px-5 py-16 lg:px-10">
-        <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <p className="eyebrow mb-5">More brands</p>
-            <h2 className="font-display text-3xl font-black text-white sm:text-5xl">
-              Every brand, one <span className="grad-text">grid.</span>
-            </h2>
-          </div>
-          <button
-            onClick={() => goToPage('contact')}
-            className="inline-flex cursor-pointer items-center gap-2 text-left font-mono text-xs uppercase tracking-widest text-gray-400 transition-colors hover:text-brand"
-          >
-            Work with me <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          {more.map((b) => (
-            <BrandCard key={b.id} brand={b} className="reveal" />
-          ))}
-        </div>
-      </section>
+      {/* ================= BY SECTOR ================= */}
+      <Sectors goToPage={goToPage} />
 
       {/* ================= STORIES ================= */}
       <section className="border-b border-border-card bg-black px-5 py-16 lg:px-10">
@@ -216,68 +189,6 @@ export function Profile({ goToPage }) {
         </div>
       </section>
 
-      {/* ================= EXTENDED NETWORK ================= */}
-      <section className="border-b border-border-card bg-dark-bg px-5 py-16 lg:px-10">
-        <div className="w-full">
-          <div className="mb-8 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="eyebrow mb-3">Extended network</p>
-              <h3 className="font-display text-2xl font-black text-white sm:text-3xl">
-                More collaborators & clients
-              </h3>
-              <p className="mt-2 max-w-xl text-sm leading-7 text-gray-500">
-                A wider circle of brands, venues and teams I have supported
-                across Uganda.
-              </p>
-            </div>
-
-            <button
-              onClick={() => setShowAll((v) => !v)}
-              className="group relative inline-flex cursor-pointer items-center gap-3 self-start overflow-hidden border border-brand/50 bg-brand/10 px-7 py-4 font-mono text-xs uppercase tracking-[0.2em] text-brand transition-all duration-300 hover:border-brand hover:bg-brand hover:text-white hover:shadow-lg hover:shadow-brand/20"
-              aria-expanded={showAll}
-            >
-              <span className="relative z-10">
-                {showAll ? 'Show less' : 'See more brands'}
-              </span>
-              {showAll ? (
-                <ChevronDown className="relative z-10 h-4 w-4 rotate-180 transition-transform duration-300" />
-              ) : (
-                <ArrowUp className="relative z-10 h-4 w-4 transition-transform duration-300 group-hover:-translate-y-0.5" />
-              )}
-            </button>
-          </div>
-
-          <AnimatePresence>
-            {showAll && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
-                className="overflow-hidden"
-              >
-                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                  {extended.map((b, i) => (
-                    <motion.a
-                      key={b.id}
-                      href={b.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.2, delay: i * 0.04 }}
-                      className="grad-border group flex items-center justify-between bg-card-bg px-5 py-4 font-mono text-[11px] uppercase tracking-widest text-gray-400 transition-colors hover:bg-brand/5 hover:text-brand"
-                    >
-                      <span className="pr-3">{b.name}</span>
-                      <ArrowUpRight className="h-3.5 w-3.5 shrink-0 opacity-0 transition-all group-hover:opacity-100" />
-                    </motion.a>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </section>
     </div>
   )
 }

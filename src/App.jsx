@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Nav } from './components/Nav'
 import { Footer } from './components/Footer'
@@ -6,16 +6,20 @@ import { Profile } from './components/Profile'
 import { Services } from './components/Services'
 import { Contact } from './components/Contact'
 import { SocialFab } from './components/SocialFab'
+import { SplashScreen } from './components/SplashScreen'
 import { useReveal } from './components/useReveal'
 
 export default function App() {
   const [view, setView] = useState('profile')
+  const [splashDone, setSplashDone] = useState(false)
   const mainRef = useRef(null)
 
   useReveal(mainRef)
 
+  const finishSplash = useCallback(() => setSplashDone(true), [])
+
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' })
+    window.scrollTo({ top: 0 })
   }, [view])
 
   const goToPage = (next) => {
@@ -25,6 +29,8 @@ export default function App() {
 
   return (
     <>
+      {!splashDone && <SplashScreen onDone={finishSplash} />}
+
       <Nav view={view} onView={goToPage} />
 
       <main ref={mainRef} className="pt-20">
