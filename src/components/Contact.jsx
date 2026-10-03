@@ -10,6 +10,17 @@ const bullets = [
   'Available for on-location shoots across Uganda',
 ]
 
+/* Matches the Services hero: vertical feather plus a left-hand vanishing
+   point, with the two mask layers intersected. */
+const heroFade = {
+  maskImage:
+    'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent), linear-gradient(to right, transparent, black 26%, black 100%)',
+  WebkitMaskImage:
+    'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent), linear-gradient(to right, transparent, black 26%, black 100%)',
+  maskComposite: 'intersect',
+  WebkitMaskComposite: 'source-in',
+}
+
 export function Contact() {
   return (
     <div>
@@ -19,16 +30,34 @@ export function Contact() {
         <div className="pointer-events-none absolute -right-24 -top-10 h-80 w-80 rounded-full bg-brand/12 blur-[120px]" />
 
         <div className="relative w-full">
-          <p className="eyebrow mb-4">Contact</p>
-          <h1 className="max-w-4xl font-display text-4xl font-black leading-[0.98] text-ink sm:text-6xl lg:text-7xl">
-            Let us shoot, edit and{' '}
-            <span className="grad-text">post something worth watching.</span>
-          </h1>
-          <p className="mt-5 max-w-2xl text-base leading-7 text-muted">
-            I am based in Kampala and take on videography, content creation,
-            social media management and event coverage. Reach out on whichever
-            channel suits you — I usually reply the same day.
-          </p>
+          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-0">
+            <div className="relative z-10 lg:pr-10">
+              <p className="eyebrow mb-4">Contact</p>
+              <h1 className="max-w-4xl font-display text-4xl font-black leading-[0.98] text-ink sm:text-6xl lg:text-7xl">
+                Let us shoot, edit and{' '}
+                <span className="grad-text">post something worth watching.</span>
+              </h1>
+              <p className="mt-5 max-w-2xl text-base leading-7 text-muted">
+                I am based in Kampala and take on videography, content creation,
+                social media management and event coverage. Reach out on whichever
+                channel suits you — I usually reply the same day.
+              </p>
+            </div>
+
+            {/* Same treatment as the Services hero: bleeds left under the
+                headline and fades out along that edge, right edge flush. */}
+            <div className="lg:-ml-[12%] lg:w-[calc(100%+12%)]">
+              <img
+                src="/img/contact-hero.webp"
+                alt=""
+                width="1700"
+                height="1046"
+                decoding="async"
+                className="w-full"
+                style={heroFade}
+              />
+            </div>
+          </div>
 
           <ul className="mt-10 grid gap-3 sm:grid-cols-2">
             {bullets.map((b) => (
