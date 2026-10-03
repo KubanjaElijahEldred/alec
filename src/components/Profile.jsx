@@ -133,7 +133,7 @@ export function Profile({ goToPage }) {
               <div className="grad-border overflow-hidden bg-card">
                 <img
                   src="/img/tools.webp"
-                  alt="Cameras, a tripod, a shotgun microphone, an LED light panel, a drone, a clapperboard and a phone — the videography kit used on Alec Visuals jobs."
+                  alt="Cameras, lenses and audio gear laid out on a dark surface."
                   width="2000"
                   height="700"
                   decoding="async"
@@ -143,7 +143,7 @@ export function Profile({ goToPage }) {
               <figcaption className="mt-3 flex flex-wrap items-center justify-between gap-2">
                 <span className="eyebrow">The kit</span>
                 <span className="font-mono text-[10px] uppercase tracking-widest text-muted-2">
-                  Everything I shoot with, on every job
+                  Standard kit for a shoot like this
                 </span>
               </figcaption>
             </figure>
