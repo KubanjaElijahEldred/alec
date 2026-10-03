@@ -409,6 +409,28 @@
     background-size: 48px 100%;
     animation: splash-sprockets 1.1s linear infinite;
   }
+
+  /* ---- Brand marquee ----
+     The track holds two identical copies of the brand list, so shifting it by
+     exactly -50% lands the second copy where the first began and the loop has
+     no seam. Each copy carries its own trailing padding so the gap after the
+     last tile matches the gaps between tiles. */
+  @keyframes brand-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .marquee-track {
+    animation: brand-marquee 44s linear infinite;
+    will-change: transform;
+  }
+  /* Pause on hover so the names are readable if someone reaches for one. */
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -421,5 +443,11 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  /* Freeze the strip dead still rather than letting the global rule snap it to
+     its final keyframe. Beats the `*` rule above on specificity. */
+  .marquee-track {
+    animation: none !important;
+    will-change: auto;
   }
 }

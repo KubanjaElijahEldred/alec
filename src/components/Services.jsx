@@ -1,6 +1,18 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { services, contactChannels } from '../data'
+import { services, contactChannels, brands } from '../data'
 import { Icon } from './Icon'
+
+/* Two-axis fade: the top and bottom edges feather away, and the left edge
+   dissolves into the headline. mask-composite intersects the two layers —
+   the -webkit- keyword is the Safari spelling of the same operation. */
+const heroFade = {
+  maskImage:
+    'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent), linear-gradient(to right, transparent, black 26%, black 100%)',
+  WebkitMaskImage:
+    'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent), linear-gradient(to right, transparent, black 26%, black 100%)',
+  maskComposite: 'intersect',
+  WebkitMaskComposite: 'source-in',
+}
 
 export function Services({ goToPage }) {
   return (
@@ -23,22 +35,76 @@ export function Services({ goToPage }) {
               </p>
             </div>
 
-            {/* The artwork fades to transparent along its left edge, so it
-                dissolves into the headline instead of ending on a hard edge. */}
-            <img
-              src="/img/services-hero.webp"
-              alt=""
-              width="1700"
-              height="1046"
-              decoding="async"
-              className="w-full lg:-ml-[12%] lg:w-[112%]"
+            {/* The photo bleeds left into the headline and fades out along
+                that edge, so it dissolves into the text rather than ending on a
+                hard vertical line. Its right edge stays flush with the right
+                edge of the card grid below.
+
+                The bleed lives on a wrapper rather than the img itself: as a
+                direct grid child the width utility lost the cascade to w-full,
+                so lg:w-[112%] never applied and the photo sat 80px short of
+                the cards' right edge. With no competing width declaration on
+                the wrapper, calc(100% + 12%) resolves against the column and
+                the edges line up. */}
+            <div className="lg:-ml-[12%] lg:w-[calc(100%+12%)]">
+              <img
+                src="/img/services-hero.webp"
+                alt=""
+                width="1700"
+                height="1046"
+                decoding="async"
+                className="w-full"
+                style={heroFade}
+              />
+            </div>
+          </div>
+
+          {/* Brands worked with — scrolls right to left. */}
+          <div className="mt-14">
+            <div className="mb-5 flex items-center gap-4">
+              <span className="eyebrow shrink-0">Brands I have worked with</span>
+              <span aria-hidden="true" className="h-px flex-1 bg-line" />
+            </div>
+            <div
+              className="overflow-hidden"
               style={{
                 maskImage:
-                  'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)',
+                  'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
                 WebkitMaskImage:
-                  'linear-gradient(to bottom, transparent, black 12%, black 88%, transparent)',
+                  'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
               }}
-            />
+            >
+              {/* Two identical copies; the second is hidden from assistive
+                  tech so the brand names are announced once, not twice. */}
+              <div className="marquee-track flex w-max">
+                {[0, 1].map((copy) => (
+                  <div
+                    key={copy}
+                    className="flex shrink-0 items-center gap-4 pr-4"
+                    aria-hidden={copy === 1 || undefined}
+                  >
+                    {brands.map((b) => (
+                      <img
+                        key={b.id}
+                        src={b.image}
+                        alt={b.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="h-14 w-14 shrink-0 rounded-lg border border-line object-cover"
+                      />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-16">
+            <p className="eyebrow mb-3">The work</p>
+            <h2 className="max-w-3xl font-display text-3xl font-black leading-tight text-ink sm:text-5xl">
+              Start with what your{' '}
+              <span className="grad-text">brand needs most.</span>
+            </h2>
           </div>
 
           {/* A real gap with individually bordered cards, rather than a single
