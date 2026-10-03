@@ -9,7 +9,7 @@ export function Services({ goToPage }) {
         <div className="grid-lines pointer-events-none absolute inset-0" />
         <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-azure/15 blur-[120px]" />
 
-        <div className="relative mx-auto w-full max-w-[1400px]">
+        <div className="relative w-full">
           <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-0">
             <div className="relative z-10 lg:pr-10">
               <p className="eyebrow mb-4">What I do</p>
