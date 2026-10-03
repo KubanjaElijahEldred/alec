@@ -43,7 +43,8 @@ export function Services({ goToPage }) {
 
           {/* A real gap with individually bordered cards, rather than a single
               bordered box whose edges butt the six images together. */}
-          <div className="mt-16 grid gap-6 md:grid-cols-2">
+          {/* Same shape as the brand grids: two up from sm, four from xl. */}
+          <div className="mt-16 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {services.map((s) => {
               const art = `/img/service-${s.id.replace('serv-', '')}.webp`
               return (
@@ -59,22 +60,22 @@ export function Services({ goToPage }) {
                       height="768"
                       loading="lazy"
                       decoding="async"
-                      className="h-60 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] sm:h-72"
+                      className="h-60 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] sm:h-72 xl:h-56"
                     />
                   </div>
 
-                  <div className="flex flex-1 flex-col p-6 text-left">
+                  <div className="flex flex-1 flex-col p-5 text-left xl:p-6">
                     <p className="font-mono text-[11px] font-bold text-azure-soft">
                       {s.number}
                     </p>
-                    <h2 className="mt-4 font-display text-2xl font-bold text-ink">
+                    <h2 className="mt-4 font-display text-2xl font-bold text-ink xl:text-xl">
                       {s.title}
                     </h2>
-                    <p className="mt-4 text-sm leading-7 text-muted">
+                    <p className="mt-4 text-sm leading-7 text-muted xl:text-[13px] xl:leading-6">
                       {s.description}
                     </p>
 
-                    <ul className="mt-5 flex flex-wrap gap-1.5">
+                    <ul className="mt-5 flex flex-wrap gap-1.5 xl:mt-4">
                       {s.features.map((f) => (
                         <li
                           key={f}

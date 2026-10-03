@@ -11,7 +11,7 @@
   --c-alt: 246 248 252;
   --c-card: 255 255 255;
   --c-card-hover: 255 245 236;
-  --c-line: 223 229 240;
+  --c-line: 212 220 238;
   --c-ink: 8 15 28;
   --c-ink-2: 23 34 54;
   --c-muted: 74 87 110;
@@ -65,6 +65,39 @@
     transition:
       background-color 0.35s ease,
       color 0.35s ease;
+  }
+
+  /* ----------------------------------------------------------------------
+     Light mode only.
+
+     --c-base and --c-card were both pure white, so a white card on a white
+     section was held apart by a 223 229 240 hairline and nothing else. This
+     paints a purple-to-blue-to-white wash on the body and drops the section
+     fills to translucent, so the white cards read as objects sitting on a
+     tinted field. The section fills use alpha so they do not stack twice.
+     ---------------------------------------------------------------------- */
+  html:not(.dark) body {
+    background-image:
+      radial-gradient(1000px 640px at 6% -12%, rgb(139 105 255 / 0.34), transparent 62%),
+      radial-gradient(920px 580px at 97% 1%, rgb(46 107 255 / 0.28), transparent 64%),
+      radial-gradient(1300px 900px at 50% 112%, rgb(129 168 255 / 0.24), transparent 66%),
+      linear-gradient(178deg, #ffffff 0%, #f7f4ff 38%, #eef4ff 72%, #e8efff 100%);
+  }
+
+  html:not(.dark) .bg-base {
+    background-color: transparent;
+  }
+
+  html:not(.dark) .bg-alt {
+    background-color: rgb(236 241 255 / 0.55);
+  }
+
+  /* Full-screen overlays must stay opaque. The rules above deliberately make
+     bg-base transparent in light mode so the wash can read through, and a
+     Tailwind important variant on the element is not enough to win against
+     them here, so the splash opts out explicitly. */
+  .splash-opaque {
+    background-color: rgb(var(--c-base)) !important;
   }
 
   ::selection {
