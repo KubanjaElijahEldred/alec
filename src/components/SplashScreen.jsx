@@ -128,8 +128,10 @@ export function SplashScreen({ onDone }) {
   const secondsLeft = Math.max(0, Math.ceil((DURATION - elapsed) / 1000))
 
   return (
+    // splash-opaque, not bg-base: in light mode plain bg-base becomes
+    // transparent so the page wash can read through the sections.
     <motion.div
-      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-base"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-base splash-opaque"
       initial={{ opacity: 1 }}
       animate={exiting ? { opacity: 0, scale: 1.04 } : { opacity: 1, scale: 1 }}
       transition={{ duration: 0.7, ease: 'easeInOut' }}

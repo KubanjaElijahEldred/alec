@@ -39,15 +39,21 @@ export function Profile({ goToPage }) {
             the brands stacked to its right. */}
         <div className="relative grid w-full gap-10 [grid-template-areas:'profile'_'intro'_'brands'] lg:grid-cols-[1fr_460px] lg:[grid-template-areas:'intro_profile'_'intro_brands'] xl:grid-cols-[1fr_520px] lg:items-stretch">
           {/* ---- Intro ---- */}
-          <div className="[grid-area:intro] flex flex-col border border-line bg-base/80 p-5 backdrop-blur-sm sm:p-8 lg:p-10">
-            <Logo className="mb-6 h-20 w-auto sm:h-28 lg:h-32" />
-
-            <p className="eyebrow mb-5">About</p>
-
-            <h1 className="max-w-5xl font-display text-4xl font-black leading-[0.96] text-ink sm:text-6xl lg:text-7xl xl:text-8xl">
+          <div className="[grid-area:intro] relative flex flex-col border border-line bg-base/80 p-5 backdrop-blur-sm sm:p-8 lg:p-10">
+            {/* Headline sits at the very top with nothing above it, and "About"
+                follows underneath. The logo shares the headline's line, flush
+                right, from lg up: at text-7xl/8xl the headline is far too wide
+                to share a flex row, so the mark is pinned to the corner and
+                the headline reserves matching padding instead. Below lg it
+                stays in flow and wraps under the headline. */}
+            <h1 className="font-display text-4xl font-black leading-[0.96] text-ink sm:text-6xl lg:pr-40 lg:text-7xl xl:pr-48 xl:text-8xl">
               Creative direction meets{' '}
               <span className="grad-text">real results.</span>
             </h1>
+
+            <Logo className="mt-7 h-16 w-auto self-start sm:h-20 lg:absolute lg:right-10 lg:top-10 lg:mt-0 lg:h-24 xl:h-28" />
+
+            <p className="eyebrow mt-8 lg:mt-10">About</p>
 
             {/* Stats */}
             <div className="mt-8 grid max-w-2xl grid-cols-3 gap-4 border-y border-line py-6">
