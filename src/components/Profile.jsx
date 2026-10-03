@@ -24,7 +24,6 @@ const serviceStrip = [
 ]
 
 export function Profile({ goToPage }) {
-  const featured = brands.slice(0, 4)
 
   return (
     <div>
@@ -170,14 +169,21 @@ export function Profile({ goToPage }) {
             </div>
           </div>
 
-          {/* ---- Featured brands ---- */}
-          <div className="[grid-area:brands] mx-auto w-full max-w-[560px] border border-line bg-card p-5 lg:max-w-none">
+          {/* ---- Featured brands ----
+              Two cards sit side by side in a single line, and the rest of the
+              roster is reached by scrolling the panel top to bottom. The list
+              is capped at roughly one row so only those two are visible at
+              rest, with the next row peeking to signal there is more. */}
+          <div className="[grid-area:brands] mx-auto w-full max-w-[560px] self-end border border-line bg-card p-5 lg:max-w-none">
             <div className="text-center lg:text-left">
               <p className="eyebrow">Brands I have worked with</p>
             </div>
-            <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {featured.map((b) => (
-                <BrandCard key={b.id} brand={b} />
+            <div
+              data-brand-scroll
+              className="mt-5 grid max-h-[856px] grid-cols-1 gap-3 overflow-y-auto pr-1 sm:max-h-[500px] sm:grid-cols-2"
+            >
+              {brands.map((b) => (
+                <BrandCard key={b.id} brand={b} compact />
               ))}
             </div>
           </div>

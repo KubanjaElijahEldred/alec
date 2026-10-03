@@ -4,8 +4,12 @@ import { ArrowUpRight } from 'lucide-react'
  * Brand card wired to the exact social profile Alec supplied.
  * The avatar is layered over a blurred, scaled copy of itself so that
  * lower-resolution profile pictures still render cleanly.
+ *
+ * `compact` shrinks the visual block and the avatar for the two-up scroll
+ * list beside the portrait, where the column is roughly half the width of a
+ * single card's natural size.
  */
-export function BrandCard({ brand, className = '' }) {
+export function BrandCard({ brand, className = '', compact = false }) {
   return (
     <a
       href={brand.url}
@@ -15,7 +19,11 @@ export function BrandCard({ brand, className = '' }) {
       aria-label={`${brand.name} — open ${brand.category} page`}
     >
       {/* Visual block */}
-      <span className="relative block h-56 overflow-hidden bg-alt sm:h-64 lg:h-72">
+      <span
+        className={`relative block overflow-hidden bg-alt ${
+          compact ? 'h-40 sm:h-44 lg:h-48' : 'h-56 sm:h-64 lg:h-72'
+        }`}
+      >
         {/* Blurred backdrop from the same avatar */}
         <img
           src={brand.image}
@@ -34,7 +42,11 @@ export function BrandCard({ brand, className = '' }) {
           alt={`${brand.name} logo`}
           loading="lazy"
           decoding="async"
-          className="relative z-10 mx-auto mt-10 h-36 w-36 rounded-full border border-line object-cover shadow-[0_0_0_8px_rgb(var(--c-card)/0.85)] transition-transform duration-500 group-hover:scale-105 sm:h-40 sm:w-40 lg:h-44 lg:w-44"
+          className={`relative z-10 mx-auto rounded-full border border-line object-cover shadow-[0_0_0_8px_rgb(var(--c-card)/0.85)] transition-transform duration-500 group-hover:scale-105 ${
+            compact
+              ? 'mt-7 h-24 w-24 sm:h-28 sm:w-28 lg:h-32 lg:w-32'
+              : 'mt-10 h-36 w-36 sm:h-40 sm:w-40 lg:h-44 lg:w-44'
+          }`}
         />
       </span>
 
