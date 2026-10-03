@@ -46,8 +46,8 @@ export function Profile({ goToPage }) {
                 the headline reserves matching padding instead. Below lg it
                 stays in flow and wraps under the headline. */}
             <h1 className="font-display text-4xl font-black leading-[0.96] text-ink sm:text-6xl lg:pr-40 lg:text-7xl xl:pr-48 xl:text-8xl">
-              Creative direction meets{' '}
-              <span className="grad-text">real results.</span>
+              Videos that make brands{' '}
+              <span className="grad-text">impossible to ignore.</span>
             </h1>
 
             <Logo className="mt-7 h-16 w-auto self-start sm:h-20 lg:absolute lg:right-10 lg:top-10 lg:mt-0 lg:h-24 xl:h-28" />
