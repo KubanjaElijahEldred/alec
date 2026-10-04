@@ -1,6 +1,25 @@
 import { ArrowRight, ArrowUpRight } from 'lucide-react'
-import { services, contactChannels, brands } from '../data'
+import { services, contactChannels } from '../data'
 import { Icon } from './Icon'
+import { BrandStrip } from './BrandStrip'
+
+/* What a project actually looks like, in three beats. Concrete beats keep the
+   hero from being another paragraph of adjectives, and they give the reader the
+   practical reason to keep going rather than restating what the headline says. */
+const process = [
+  {
+    step: 'Brief',
+    detail: 'Audience, message and deliverables agreed before the camera comes out.',
+  },
+  {
+    step: 'Production',
+    detail: 'Scripted, shot and directed on location anywhere in Uganda.',
+  },
+  {
+    step: 'Delivery',
+    detail: 'Edited cuts, captions and a posting plan you can keep using.',
+  },
+]
 
 /* Two-axis fade: the top and bottom edges feather away, and the left edge
    dissolves into the headline. mask-composite intersects the two layers —
@@ -17,15 +36,18 @@ const heroFade = {
 export function Services({ goToPage }) {
   return (
     <div>
-      <section className="relative overflow-hidden border-b border-line px-5 py-16 sm:py-20 lg:px-10">
+      <section className="relative overflow-hidden border-b border-line px-5 py-16 sm:py-20 lg:px-10 lg:py-24 xl:py-28">
         <div className="grid-lines pointer-events-none absolute inset-0" />
         <div className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-azure/15 blur-[120px]" />
 
         <div className="relative w-full">
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-0">
-            <div className="relative z-10 lg:pr-10">
+          <div className="grid items-center gap-10 xl:grid-cols-[1.05fr_1fr] xl:gap-0">
+            <div className="relative z-10 xl:pr-10">
               <p className="eyebrow mb-4">What I do</p>
-              <h1 className="max-w-5xl font-display text-4xl font-black leading-tight text-ink sm:text-6xl lg:text-7xl">
+              {/* text-7xl only from 2xl. In the xl column the headline wrapped to 819px --
+                  taller than the photo beside it -- which left the two columns
+                  touching with no gap above or below the text. */}
+              <h1 className="max-w-5xl font-display text-4xl font-black leading-tight text-ink sm:text-6xl 2xl:text-7xl">
                 Services for brands that need{' '}
                 <span className="grad-text">clear content.</span>
               </h1>
@@ -33,6 +55,25 @@ export function Services({ goToPage }) {
                 I keep the process simple: understand the brand, plan the message,
                 shoot the content, post with consistency, and track what is working.
               </p>
+              <p className="mt-4 max-w-2xl text-base leading-7 text-muted">
+                Most brands arrive with a folder of raw footage and no plan for it.
+                I turn that into a consistent stream of posts — shot for the brand,
+                cut for the platform, and scheduled so the work keeps appearing long
+                after the shoot ends.
+              </p>
+
+              {/* Three beats rather than more prose: it adds substance to the hero
+                  without stacking another wall of text above the fold. */}
+              <dl className="mt-9 grid gap-x-8 gap-y-6 border-t border-line pt-7 sm:grid-cols-3">
+                {process.map(({ step, detail }) => (
+                  <div key={step}>
+                    <dt className="font-mono text-[10px] uppercase tracking-widest text-brand">
+                      {step}
+                    </dt>
+                    <dd className="mt-2 text-sm leading-6 text-muted">{detail}</dd>
+                  </div>
+                ))}
+              </dl>
             </div>
 
             {/* The photo bleeds left into the headline and fades out along
@@ -46,58 +87,21 @@ export function Services({ goToPage }) {
                 the cards' right edge. With no competing width declaration on
                 the wrapper, calc(100% + 12%) resolves against the column and
                 the edges line up. */}
-            <div className="lg:-ml-[12%] lg:w-[calc(100%+12%)]">
+            <div className="xl:-ml-[12%] xl:w-[calc(100%+12%)] xl:max-h-[880px] xl:aspect-[3/4]">
               <img
                 src="/img/services-hero.webp"
                 alt=""
                 width="1700"
                 height="1046"
                 decoding="async"
-                className="w-full"
+                className="w-full xl:h-full xl:object-cover"
                 style={heroFade}
               />
             </div>
           </div>
 
           {/* Brands worked with — scrolls right to left. */}
-          <div className="mt-14">
-            <div className="mb-5 flex items-center gap-4">
-              <span className="eyebrow shrink-0">Brands I have worked with</span>
-              <span aria-hidden="true" className="h-px flex-1 bg-line" />
-            </div>
-            <div
-              className="overflow-hidden"
-              style={{
-                maskImage:
-                  'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
-                WebkitMaskImage:
-                  'linear-gradient(to right, transparent, black 6%, black 94%, transparent)',
-              }}
-            >
-              {/* Two identical copies; the second is hidden from assistive
-                  tech so the brand names are announced once, not twice. */}
-              <div className="marquee-track flex w-max">
-                {[0, 1].map((copy) => (
-                  <div
-                    key={copy}
-                    className="flex shrink-0 items-center gap-4 pr-4"
-                    aria-hidden={copy === 1 || undefined}
-                  >
-                    {brands.map((b) => (
-                      <img
-                        key={b.id}
-                        src={b.image}
-                        alt={b.name}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-14 w-14 shrink-0 rounded-lg border border-line object-cover"
-                      />
-                    ))}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+          <BrandStrip className="mt-14" />
 
           <div className="mt-16">
             <p className="eyebrow mb-3">The work</p>
