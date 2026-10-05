@@ -37,7 +37,7 @@ export function Profile({ goToPage }) {
         {/* Named areas: portrait first on mobile, then intro, then brands.
             From lg up the intro column spans both rows with the portrait and
             the brands stacked to its right. */}
-        <div className="relative grid w-full gap-10 [grid-template-areas:'profile'_'intro'_'brands'] lg:grid-cols-[1fr_460px] lg:grid-rows-[minmax(0,1fr)_auto] lg:[grid-template-areas:'intro_profile'_'intro_brands'] xl:grid-cols-[1fr_520px] lg:items-stretch">
+        <div className="relative grid w-full gap-10 [grid-template-areas:'profile'_'intro'_'brands'] lg:grid-cols-[1fr_460px] lg:[grid-template-areas:'intro_profile'_'intro_brands'] xl:grid-cols-[1fr_520px] lg:items-stretch">
           {/* ---- Intro ---- */}
           <div className="[grid-area:intro] relative flex flex-col border border-line bg-base/80 p-5 backdrop-blur-sm sm:p-8 lg:p-10">
             {/* Headline sits at the very top with nothing above it, and "About"
@@ -156,7 +156,7 @@ export function Profile({ goToPage }) {
           </div>
 
           {/* ---- Portrait ---- */}
-          <div className="[grid-area:profile] grad-border relative mx-auto aspect-[4/5] w-full max-w-[520px] overflow-hidden bg-card sm:aspect-[3/4] lg:aspect-auto lg:min-h-[520px] lg:h-full lg:max-w-none">
+          <div className="[grid-area:profile] grad-border relative mx-auto aspect-[4/5] w-full max-w-[520px] overflow-hidden bg-card sm:aspect-[3/4] lg:aspect-auto lg:min-h-[520px] lg:max-w-none">
             <img
               src={profile.portrait}
               alt={`${profile.name} — ${profile.brand}`}
