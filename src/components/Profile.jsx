@@ -39,7 +39,7 @@ export function Profile({ goToPage }) {
             the brands stacked to its right. */}
         <div className="relative grid w-full gap-10 [grid-template-areas:'profile'_'intro'_'brands'] lg:grid-cols-[1fr_460px] lg:[grid-template-areas:'intro_profile'_'intro_brands'] xl:grid-cols-[1fr_520px] lg:items-stretch">
           {/* ---- Intro ---- */}
-          <div className="[grid-area:intro] relative flex flex-col border border-line bg-base/80 p-5 backdrop-blur-sm sm:p-8 lg:p-10">
+          <div className="[grid-area:intro] relative flex min-w-0 flex-col border border-line bg-base/80 p-5 backdrop-blur-sm sm:p-8 lg:p-10">
             {/* Headline sits at the very top with nothing above it, and "About"
                 follows underneath. The logo shares the headline's line, flush
                 right, from lg up: at text-7xl/8xl the headline is far too wide
