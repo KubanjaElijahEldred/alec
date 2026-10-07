@@ -26,7 +26,17 @@ const pageantShots = [
     width: 900,
     height: 1600,
   },
+  {
+    src: '/img/miss-7145.webp',
+    alt: 'Miss Tourism in a fourth look from the same pageant shoot',
+    width: 900,
+    height: 1600,
+  },
 ]
+
+/* The hero strip is a fixed three-up, so it takes the leading three frames.
+   The card and section carousels show all of them. */
+const heroShots = pageantShots.slice(0, 3)
 
 /* What a project actually looks like, in three beats. Concrete beats keep the
    hero from being another paragraph of adjectives, and they give the reader the
@@ -111,12 +121,14 @@ export function Services({ goToPage }) {
 
               {/* The copy alone leaves the column ~270px shorter than the 880px
                   photo beside it, so items-start moved the old void from under
-                  the navbar to under this list. The three pageant frames close
-                  it: max-w-lg keeps the strip's height from growing with the
-                  column on wide screens, which is what makes it land within
-                  ~20px of the photo at 1280, 1440 and 1920 alike. */}
+                  the navbar to under this list. Three pageant frames close it:
+                  max-w-lg keeps the strip's height from growing with the column
+                  on wide screens, which is what makes it land within ~20px of
+                  the photo at 1280, 1440 and 1920 alike. A fourth frame would
+                  wrap to a second row and roughly double that height, so the
+                  strip is pinned to heroShots rather than the full set. */}
               <div className="mt-9 grid max-w-lg grid-cols-3 gap-3">
-                {pageantShots.map((s) => (
+                {heroShots.map((s) => (
                   <img
                     key={s.src}
                     src={s.src}
@@ -178,15 +190,29 @@ export function Services({ goToPage }) {
                   className="grad-border reveal group flex flex-col bg-card transition-colors hover:bg-card-hover"
                 >
                   <div className="relative overflow-hidden">
-                    <img
-                      src={art}
-                      alt=""
-                      width="1200"
-                      height="768"
-                      loading="lazy"
-                      decoding="async"
-                      className="h-60 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] sm:h-72 xl:h-56"
-                    />
+                    {/* The content-creation card carries the pageant set itself
+                        rather than stock art — it is the closest match between
+                        what the card sells and what is actually on the shelf.
+                        Sizes land on the same h-60 / h-72 / h-56 the other five
+                        cards use, so the row stays level. */}
+                    {s.id === 'serv-content' ? (
+                      <SlideShow
+                        images={pageantShots}
+                        label="Miss Tourism content creation"
+                        className="h-60 w-full sm:h-72 xl:h-56"
+                        frameClass="h-full w-full"
+                      />
+                    ) : (
+                      <img
+                        src={art}
+                        alt=""
+                        width="1200"
+                        height="768"
+                        loading="lazy"
+                        decoding="async"
+                        className="h-60 w-full object-cover transition-transform duration-700 group-hover:scale-[1.04] sm:h-72 xl:h-56"
+                      />
+                    )}
                   </div>
 
                   <div className="flex flex-1 flex-col p-5 text-left xl:p-6">
@@ -239,12 +265,12 @@ export function Services({ goToPage }) {
           <div className="max-w-2xl">
             <p className="eyebrow mb-4">Recent work</p>
             <h2 className="font-display text-3xl font-black leading-tight text-ink sm:text-5xl">
-              Three frames from a{' '}
+              Four frames from a{' '}
               <span className="grad-text">pageant shoot.</span>
             </h2>
             <p className="mt-5 text-base leading-7 text-muted">
               A title holder's feed cannot run on one hero image. This is one
-              look shot three ways — the same set, framed so each frame can
+              look shot four ways — the same set, framed so each frame can
               carry a post on its own.
             </p>
             <p className="mt-4 text-base leading-7 text-muted">
@@ -275,7 +301,7 @@ export function Services({ goToPage }) {
                 Miss Tourism
               </p>
               <p className="font-mono text-[10px] uppercase tracking-widest text-azure-soft">
-                03 frames
+                {`${String(pageantShots.length).padStart(2, '0')} frames`}
               </p>
             </div>
           </div>
