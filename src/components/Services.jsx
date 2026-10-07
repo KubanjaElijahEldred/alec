@@ -38,6 +38,23 @@ const pageantShots = [
    The card and section carousels show all of them. */
 const heroShots = pageantShots.slice(0, 3)
 
+/* Second set, unrelated to the first: both landscape and both within 1% of
+   9/5, so an aspect-[9/5] band shows them with essentially no crop. */
+const sceneShots = [
+  {
+    src: '/img/loc-9580.webp',
+    alt: 'Miss Tourism contestants posing together for a photo scene on set',
+    width: 1600,
+    height: 886,
+  },
+  {
+    src: '/img/loc-9581.webp',
+    alt: 'Miss Tourism contestants holding their poses for a second frame of the photo scene',
+    width: 1600,
+    height: 892,
+  },
+]
+
 /* What a project actually looks like, in three beats. Concrete beats keep the
    hero from being another paragraph of adjectives, and they give the reader the
    practical reason to keep going rather than restating what the headline says. */
@@ -302,6 +319,50 @@ export function Services({ goToPage }) {
               </p>
               <p className="font-mono text-[10px] uppercase tracking-widest text-azure-soft">
                 {`${String(pageantShots.length).padStart(2, '0')} frames`}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Photo scene — full bleed and landscape, deliberately the opposite of
+          the portrait card above: edge to edge, copy laid over the frame
+          instead of beside it. The sources are within 1% of 9/5 so the frame
+          shows them whole; max-h only bites on wide viewports where the band
+          would otherwise outgrow the screen, and object-center keeps that
+          crop even rather than trimming heads off the top. */}
+      <section className="relative border-t border-line">
+        <div className="relative">
+          <SlideShow
+            images={sceneShots}
+            label="Miss Tourism photo scene"
+            frameClass="aspect-[9/5] w-full max-h-[92vh]"
+            objectPos="center"
+            dots="end"
+            /* The overlaid copy sits bottom-left, so the side arrows would
+               land on top of it below sm where the band is only ~217px tall.
+               Dots alone carry the small screens. */
+            arrowsClass="hidden sm:block"
+          />
+
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-black/85 via-black/35 to-transparent"
+          />
+
+          <div className="pointer-events-none absolute inset-0 flex items-end p-5 sm:p-10 lg:p-14">
+            <div className="max-w-xl pb-14 sm:pb-14 lg:pb-16">
+              <p className="font-mono text-[9px] uppercase tracking-[0.3em] text-white/65 sm:text-[10px]">
+                On set
+              </p>
+              <h2 className="mt-3 font-display text-xl font-black leading-tight text-white sm:mt-4 sm:text-3xl lg:text-5xl">
+                A photo scene with the whole cast.
+              </h2>
+              <p className="mt-4 hidden max-w-lg text-sm leading-7 text-white/80 sm:block sm:text-base">
+                Miss Tourism contestants holding a pose while the frame is built
+                around them. A scene like this is a group problem before it is a
+                portrait one — order, light and timing all have to land on the
+                same second.
               </p>
             </div>
           </div>
