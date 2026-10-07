@@ -3,6 +3,20 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 const INTERVAL = 4500
 
+/* Written out in full rather than composed as `object-${pos}`: Tailwind only
+   ships the classes it can see in the source, so a template would be purged. */
+const OBJECT_POS = {
+  top: 'object-top',
+  center: 'object-center',
+  bottom: 'object-bottom',
+}
+
+const DOTS = {
+  center: 'justify-center',
+  end: 'justify-end',
+  start: 'justify-start',
+}
+
 /* The CSS `prefers-reduced-motion` block zeroes out transitions, but it cannot
    reach a JS interval. Autoplay has to be stopped here or it keeps advancing
    for anyone who has asked for less motion. */
@@ -19,7 +33,15 @@ function usePrefersReducedMotion() {
   return reduced
 }
 
-export function SlideShow({ images, label, className = '', frameClass = '' }) {
+export function SlideShow({
+  images,
+  label,
+  className = '',
+  frameClass = '',
+  objectPos = 'top',
+  dots = 'center',
+  arrowsClass = '',
+}) {
   const count = images.length
   const [index, setIndex] = useState(0)
   const [paused, setPaused] = useState(false)
@@ -83,10 +105,13 @@ export function SlideShow({ images, label, className = '', frameClass = '' }) {
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding="async"
               aria-hidden={!active}
-              /* object-top rather than centre: every source is portrait and
-                 the 9/16 frame is taller than all of them, so the only crop
-                 is lateral — this keeps the full height of each frame. */
-              className={`absolute inset-0 h-full w-full object-cover object-top transition-opacity duration-700 ${
+              /* object-top for the portrait set: the frame is taller than the
+                 sources, so the only crop is lateral and this keeps the full
+                 height. Landscape sources pass center instead, where the
+                 middle of the frame is the safest thing to keep. */
+              className={`absolute inset-0 h-full w-full object-cover ${
+                OBJECT_POS[objectPos] || OBJECT_POS.top
+              } transition-opacity duration-700 ${
                 active ? 'opacity-100' : 'opacity-0'
               }`}
             />
@@ -103,7 +128,7 @@ export function SlideShow({ images, label, className = '', frameClass = '' }) {
           type="button"
           onClick={() => goTo(index - 1)}
           aria-label="Previous slide"
-          className="absolute left-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer rounded-full border border-white/40 bg-black/45 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+          className={`absolute left-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer rounded-full border border-white/40 bg-black/45 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${arrowsClass}`}
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -112,12 +137,16 @@ export function SlideShow({ images, label, className = '', frameClass = '' }) {
           type="button"
           onClick={() => goTo(index + 1)}
           aria-label="Next slide"
-          className="absolute right-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer rounded-full border border-white/40 bg-black/45 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+          className={`absolute right-3 top-1/2 z-10 -translate-y-1/2 cursor-pointer rounded-full border border-white/40 bg-black/45 p-2 text-white backdrop-blur-sm transition-colors hover:bg-black/70 focus-visible:outline focus-visible:outline-2 focus-visible:outline-white ${arrowsClass}`}
         >
           <ChevronRight className="h-5 w-5" />
         </button>
 
-        <div className="absolute inset-x-0 bottom-4 z-10 flex items-center justify-center gap-2">
+        <div
+          className={`absolute inset-x-0 bottom-4 z-10 flex items-center gap-2 ${
+            DOTS[dots] || DOTS.center
+          }`}
+        >
           {images.map((img, i) => (
             <button
               key={img.src}
